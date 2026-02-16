@@ -83,6 +83,7 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
             <button
               type="button"
               onClick={() => removeTag(tag)}
+              aria-label={`Remove tag ${tag}`}
               className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
             >
               &times;
@@ -105,9 +106,9 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
 
       {/* Suggestions dropdown */}
       {showSuggestions && suggestions.length > 0 && (
-        <ul className="absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+        <ul role="listbox" className="absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-md dark:border-zinc-700 dark:bg-zinc-900">
           {suggestions.map((s) => (
-            <li key={s}>
+            <li key={s} role="option">
               <button
                 type="button"
                 onClick={() => addTag(s)}

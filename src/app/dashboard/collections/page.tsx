@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useToast } from "@/components/Toast";
+import ConfirmModal from "@/components/ConfirmModal";
+import { CollectionGridSkeleton } from "@/components/Skeleton";
 
 interface Collection {
   id: string;
@@ -14,9 +16,10 @@ interface Collection {
 }
 
 export default function CollectionsPage() {
-  const router = useRouter();
+  const toast = useToast();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -29,25 +32,38 @@ export default function CollectionsPage() {
   }, []);
 
   async function handleDelete(id: string) {
-    if (!confirm("Delete this collection? Bookmarks inside won't be deleted.")) return;
-
-    await fetch(`/api/collections/${id}`, { method: "DELETE" });
-    setCollections((prev) => prev.filter((c) => c.id !== id));
+    try {
+      await fetch(`/api/collections/${id}`, { method: "DELETE" });
+      setCollections((prev) => prev.filter((c) => c.id !== id));
+      toast.success("Collection deleted");
+    } catch {
+      toast.error("Failed to delete collection");
+    }
+    setDeleteTarget(null);
   }
 
   if (loading) {
-    return <p className="text-sm text-zinc-400">Loading collections...</p>;
+    return (
+      <div>
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+            Collections
+          </h1>
+        </div>
+        <CollectionGridSkeleton />
+      </div>
+    );
   }
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
           Collections
         </h1>
         <Link
           href="/dashboard/collections/new"
-          className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
         >
           + New Collection
         </Link>
@@ -82,8 +98,9 @@ export default function CollectionsPage() {
                 </p>
               </Link>
               <button
-                onClick={() => handleDelete(collection.id)}
-                className="absolute right-2 top-2 rounded p-1 text-zinc-400 opacity-0 hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
+                onClick={() => setDeleteTarget(collection.id)}
+                aria-label={`Delete collection ${collection.name}`}
+                className="absolute right-2 top-2 rounded p-1 text-zinc-400 opacity-100 hover:bg-red-50 hover:text-red-600 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -93,6 +110,16 @@ export default function CollectionsPage() {
           ))}
         </div>
       )}
+
+      <ConfirmModal
+        open={deleteTarget !== null}
+        title="Delete collection"
+        message="Are you sure? Bookmarks inside won't be deleted."
+        confirmLabel="Delete"
+        destructive
+        onConfirm={() => deleteTarget && handleDelete(deleteTarget)}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

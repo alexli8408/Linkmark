@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import BookmarkCard from "@/components/BookmarkCard";
+import { useToast } from "@/components/Toast";
+import { BookmarkListSkeleton } from "@/components/Skeleton";
 
 interface BookmarkTag {
   tag: { id: string; name: string };
@@ -35,7 +37,7 @@ interface AvailableBookmark {
 }
 
 export default function CollectionDetailPage() {
-  const router = useRouter();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
 
   const [collection, setCollection] = useState<Collection | null>(null);
@@ -66,30 +68,45 @@ export default function CollectionDetailPage() {
   }, [id]);
 
   async function handleSaveEdit() {
-    await fetch(`/api/collections/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: editName, description: editDescription }),
-    });
-    setEditing(false);
-    loadCollection();
+    try {
+      await fetch(`/api/collections/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: editName, description: editDescription }),
+      });
+      toast.success("Collection updated");
+      setEditing(false);
+      loadCollection();
+    } catch {
+      toast.error("Failed to update collection");
+    }
   }
 
   async function handleAddBookmark(bookmarkId: string) {
-    await fetch(`/api/collections/${id}/bookmarks`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ bookmarkId }),
-    });
-    setShowAddPicker(false);
-    loadCollection();
+    try {
+      await fetch(`/api/collections/${id}/bookmarks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookmarkId }),
+      });
+      toast.success("Bookmark added to collection");
+      setShowAddPicker(false);
+      loadCollection();
+    } catch {
+      toast.error("Failed to add bookmark");
+    }
   }
 
   async function handleRemoveBookmark(bookmarkId: string) {
-    await fetch(`/api/collections/${id}/bookmarks?bookmarkId=${bookmarkId}`, {
-      method: "DELETE",
-    });
-    loadCollection();
+    try {
+      await fetch(`/api/collections/${id}/bookmarks?bookmarkId=${bookmarkId}`, {
+        method: "DELETE",
+      });
+      toast.success("Bookmark removed from collection");
+      loadCollection();
+    } catch {
+      toast.error("Failed to remove bookmark");
+    }
   }
 
   async function openAddPicker() {
@@ -103,7 +120,15 @@ export default function CollectionDetailPage() {
   }
 
   if (loading) {
-    return <p className="text-sm text-zinc-400">Loading...</p>;
+    return (
+      <div>
+        <div className="mb-6">
+          <div className="h-8 w-48 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+          <div className="mt-2 h-4 w-32 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+        <BookmarkListSkeleton />
+      </div>
+    );
   }
 
   if (!collection) {
@@ -145,7 +170,7 @@ export default function CollectionDetailPage() {
             </div>
           </div>
         ) : (
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
                 {collection.name}
@@ -224,8 +249,8 @@ export default function CollectionDetailPage() {
               <BookmarkCard {...bookmark} />
               <button
                 onClick={() => handleRemoveBookmark(bookmark.id)}
-                title="Remove from collection"
-                className="absolute right-12 top-4 rounded p-1 text-zinc-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400"
+                aria-label="Remove from collection"
+                className="absolute right-12 top-4 rounded p-1 text-zinc-400 opacity-100 hover:bg-red-50 hover:text-red-600 md:opacity-0 md:hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BookmarkCard from "./BookmarkCard";
+import { BookmarkListSkeleton } from "./Skeleton";
 
 interface BookmarkTag {
   tag: { id: string; name: string };
@@ -79,6 +80,7 @@ export default function BookmarkList() {
           <input
             type="text"
             placeholder="Search bookmarks..."
+            aria-label="Search bookmarks"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="flex-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
@@ -114,6 +116,7 @@ export default function BookmarkList() {
             {tagFilter}
             <button
               onClick={() => updateParams({ tag: null })}
+              aria-label="Clear tag filter"
               className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
             >
               &times;
@@ -129,6 +132,7 @@ export default function BookmarkList() {
           <button
             key={s}
             onClick={() => updateParams({ sort: s })}
+            aria-pressed={sort === s}
             className={`rounded-md px-2 py-1 text-xs font-medium ${
               sort === s
                 ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
@@ -142,7 +146,7 @@ export default function BookmarkList() {
 
       {/* Bookmark list */}
       {loading ? (
-        <p className="text-sm text-zinc-400">Loading bookmarks...</p>
+        <BookmarkListSkeleton />
       ) : bookmarks.length === 0 ? (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           {searchQuery || tagFilter

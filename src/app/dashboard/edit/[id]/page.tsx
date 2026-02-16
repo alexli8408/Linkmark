@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import TagInput from "@/components/TagInput";
+import { useToast } from "@/components/Toast";
+import { FormSkeleton } from "@/components/Skeleton";
 
 export default function EditBookmarkPage() {
   const router = useRouter();
+  const toast = useToast();
   const { id } = useParams<{ id: string }>();
 
   const [url, setUrl] = useState("");
@@ -53,17 +56,24 @@ export default function EditBookmarkPage() {
         throw new Error(data.error ?? "Failed to update bookmark");
       }
 
+      toast.success("Bookmark updated");
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const msg = err instanceof Error ? err.message : "Something went wrong";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
   }
 
   if (loading) {
-    return <p className="text-sm text-zinc-400">Loading...</p>;
+    return (
+      <div className="mx-auto max-w-lg">
+        <FormSkeleton />
+      </div>
+    );
   }
 
   return (

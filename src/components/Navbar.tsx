@@ -5,21 +5,21 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className="flex h-14 items-center justify-between border-b border-zinc-200 bg-white px-6 dark:border-zinc-800 dark:bg-zinc-950">
-      <Link href="/" className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+    <nav className="flex h-14 items-center justify-between bg-white px-6 dark:bg-zinc-950">
+      <Link href="/dashboard" className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
         Linkmark
       </Link>
 
       <div className="flex items-center gap-4">
         {session?.user ? (
           <>
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">
+            <span className="hidden text-sm text-zinc-600 sm:inline dark:text-zinc-400">
               {session.user.name ?? session.user.email}
             </span>
             {session.user.image && (
               <img
                 src={session.user.image}
-                alt=""
+                alt="User avatar"
                 className="h-8 w-8 rounded-full"
               />
             )}
@@ -31,6 +31,7 @@ export default async function Navbar() {
             >
               <button
                 type="submit"
+                aria-label="Sign out"
                 className="rounded-md bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
                 Sign out

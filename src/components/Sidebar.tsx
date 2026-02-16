@@ -15,7 +15,7 @@ const navItems = [
   { href: "/dashboard/collections", label: "Collections" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const searchParams = useSearchParams();
   const activeTag = searchParams.get("tag") ?? "";
   const [tags, setTags] = useState<Tag[]>([]);
@@ -36,12 +36,13 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside className="flex w-56 flex-col border-r border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950">
-      <nav className="flex flex-col gap-1">
+    <aside className="flex h-full w-56 flex-col border-r border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950">
+      <nav aria-label="Main navigation" className="flex flex-col gap-1">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
+            onClick={onNavigate}
             className="rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             {item.label}
@@ -51,10 +52,10 @@ export default function Sidebar() {
 
       {tags.length > 0 && (
         <div className="mt-6">
-          <h3 className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+          <h3 id="tags-heading" className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Tags
           </h3>
-          <nav className="flex flex-col gap-0.5">
+          <nav aria-labelledby="tags-heading" className="flex flex-col gap-0.5">
             {tags.map((tag) => (
               <Link
                 key={tag.id}
@@ -63,6 +64,7 @@ export default function Sidebar() {
                     ? "/dashboard"
                     : `/dashboard?tag=${encodeURIComponent(tag.name)}`
                 }
+                onClick={onNavigate}
                 className={`flex items-center justify-between rounded-md px-3 py-1.5 text-sm ${
                   activeTag === tag.name
                     ? "bg-zinc-200 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50"

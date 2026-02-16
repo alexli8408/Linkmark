@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import TagInput from "@/components/TagInput";
+import { useToast } from "@/components/Toast";
 
 export default function NewBookmarkPage() {
   const router = useRouter();
+  const toast = useToast();
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
@@ -35,10 +37,13 @@ export default function NewBookmarkPage() {
         throw new Error(data.error ?? "Failed to create bookmark");
       }
 
+      toast.success("Bookmark saved");
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const msg = err instanceof Error ? err.message : "Something went wrong";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
