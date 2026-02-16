@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const sort = searchParams.get("sort") ?? "newest";
+  const search = searchParams.get("q") ?? "";
+  const tagFilter = searchParams.get("tag") ?? "";
 
   const orderBy =
     sort === "oldest"
@@ -20,8 +22,25 @@ export async function GET(req: NextRequest) {
         ? { title: "asc" as const }
         : { createdAt: "desc" as const };
 
+  const where: Record<string, unknown> = { userId: session.user.id };
+
+  if (search) {
+    where.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      { url: { contains: search, mode: "insensitive" } },
+      { note: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+    ];
+  }
+
+  if (tagFilter) {
+    where.tags = {
+      some: { tag: { name: tagFilter } },
+    };
+  }
+
   const bookmarks = await prisma.bookmark.findMany({
-    where: { userId: session.user.id },
+    where,
     orderBy,
     include: { tags: { include: { tag: true } } },
   });
@@ -37,10 +56,11 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { url, title, note } = body as {
+  const { url, title, note, tags } = body as {
     url: string;
     title?: string;
     note?: string;
+    tags?: string[];
   };
 
   if (!url) {
@@ -73,7 +93,24 @@ export async function POST(req: NextRequest) {
       favicon,
       note: note ?? null,
       userId: session.user.id,
+      tags: tags?.length
+        ? {
+            create: await Promise.all(
+              tags.map(async (name) => {
+                const tag = await prisma.tag.upsert({
+                  where: {
+                    name_userId: { name: name.toLowerCase(), userId: session.user!.id! },
+                  },
+                  update: {},
+                  create: { name: name.toLowerCase(), userId: session.user!.id! },
+                });
+                return { tagId: tag.id };
+              })
+            ),
+          }
+        : undefined,
     },
+    include: { tags: { include: { tag: true } } },
   });
 
   return NextResponse.json(bookmark, { status: 201 });

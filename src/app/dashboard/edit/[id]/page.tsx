@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import TagInput from "@/components/TagInput";
 
 export default function EditBookmarkPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function EditBookmarkPage() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +28,9 @@ export default function EditBookmarkPage() {
       setUrl(data.url);
       setTitle(data.title ?? "");
       setNote(data.note ?? "");
+      setTags(
+        data.tags?.map((bt: { tag: { name: string } }) => bt.tag.name) ?? []
+      );
       setLoading(false);
     }
     load();
@@ -40,7 +45,7 @@ export default function EditBookmarkPage() {
       const res = await fetch(`/api/bookmarks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, title, note }),
+        body: JSON.stringify({ url, title, note, tags }),
       });
 
       if (!res.ok) {
@@ -115,6 +120,13 @@ export default function EditBookmarkPage() {
             onChange={(e) => setNote(e.target.value)}
             className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
           />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            Tags
+          </label>
+          <TagInput tags={tags} onChange={setTags} />
         </div>
 
         {error && (

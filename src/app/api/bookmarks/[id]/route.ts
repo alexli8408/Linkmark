@@ -46,11 +46,34 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  const { url, title, note } = body as {
+  const { url, title, note, tags } = body as {
     url?: string;
     title?: string;
     note?: string;
+    tags?: string[];
   };
+
+  // If tags are provided, replace all existing tag associations
+  if (tags !== undefined) {
+    await prisma.bookmarkTag.deleteMany({ where: { bookmarkId: id } });
+
+    if (tags.length > 0) {
+      await Promise.all(
+        tags.map(async (name) => {
+          const tag = await prisma.tag.upsert({
+            where: {
+              name_userId: { name: name.toLowerCase(), userId: session.user!.id! },
+            },
+            update: {},
+            create: { name: name.toLowerCase(), userId: session.user!.id! },
+          });
+          await prisma.bookmarkTag.create({
+            data: { bookmarkId: id, tagId: tag.id },
+          });
+        })
+      );
+    }
+  }
 
   const bookmark = await prisma.bookmark.update({
     where: { id },
@@ -59,6 +82,7 @@ export async function PATCH(
       ...(title !== undefined && { title }),
       ...(note !== undefined && { note }),
     },
+    include: { tags: { include: { tag: true } } },
   });
 
   return NextResponse.json(bookmark);

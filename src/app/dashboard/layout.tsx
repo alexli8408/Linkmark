@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import Navbar from "@/components/Navbar";
@@ -18,7 +19,9 @@ export default async function DashboardLayout({
     <div className="flex h-screen flex-col">
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <Suspense>
+          <Sidebar />
+        </Suspense>
         <main className="flex-1 overflow-y-auto bg-white p-6 dark:bg-zinc-950">
           {children}
         </main>

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import TagInput from "@/components/TagInput";
 
 export default function NewBookmarkPage() {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +26,7 @@ export default function NewBookmarkPage() {
           url,
           title: title || undefined,
           note: note || undefined,
+          tags: tags.length > 0 ? tags : undefined,
         }),
       });
 
@@ -99,6 +102,14 @@ export default function NewBookmarkPage() {
             onChange={(e) => setNote(e.target.value)}
             className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
           />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            Tags
+          </label>
+          <TagInput tags={tags} onChange={setTags} />
+          <p className="mt-1 text-xs text-zinc-400">Press Enter or comma to add a tag</p>
         </div>
 
         {error && (

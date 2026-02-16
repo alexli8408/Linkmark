@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface BookmarkTag {
+  tag: { id: string; name: string };
+}
+
 interface BookmarkCardProps {
   id: string;
   url: string;
@@ -12,6 +16,8 @@ interface BookmarkCardProps {
   favicon: string | null;
   note: string | null;
   createdAt: string;
+  tags?: BookmarkTag[];
+  onTagClick?: (tag: string) => void;
 }
 
 export default function BookmarkCard({
@@ -22,6 +28,8 @@ export default function BookmarkCard({
   favicon,
   note,
   createdAt,
+  tags,
+  onTagClick,
 }: BookmarkCardProps) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
@@ -81,6 +89,20 @@ export default function BookmarkCard({
           <p className="mt-1 line-clamp-2 text-xs italic text-zinc-500 dark:text-zinc-400">
             {note}
           </p>
+        )}
+        {tags && tags.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {tags.map(({ tag }) => (
+              <button
+                key={tag.id}
+                type="button"
+                onClick={() => onTagClick?.(tag.name)}
+                className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+              >
+                {tag.name}
+              </button>
+            ))}
+          </div>
         )}
         <p className="mt-2 text-xs text-zinc-400">
           {new Date(createdAt).toLocaleDateString()}
