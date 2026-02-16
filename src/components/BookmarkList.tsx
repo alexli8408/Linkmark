@@ -160,6 +160,7 @@ export default function BookmarkList() {
               key={bookmark.id}
               {...bookmark}
               onTagClick={handleTagClick}
+              onDelete={(id) => setBookmarks((prev) => prev.filter((b) => b.id !== id))}
             />
           ))}
         </div>

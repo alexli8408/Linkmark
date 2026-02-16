@@ -21,6 +21,7 @@ interface BookmarkCardProps {
   createdAt: string;
   tags?: BookmarkTag[];
   onTagClick?: (tag: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 export default function BookmarkCard({
@@ -34,6 +35,7 @@ export default function BookmarkCard({
   createdAt,
   tags,
   onTagClick,
+  onDelete,
 }: BookmarkCardProps) {
   const router = useRouter();
   const toast = useToast();
@@ -55,7 +57,7 @@ export default function BookmarkCard({
     try {
       await fetch(`/api/bookmarks/${id}`, { method: "DELETE" });
       toast.success("Bookmark deleted");
-      router.refresh();
+      onDelete?.(id);
     } catch {
       toast.error("Failed to delete bookmark");
       setDeleting(false);

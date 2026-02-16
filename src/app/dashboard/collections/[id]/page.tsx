@@ -246,7 +246,7 @@ export default function CollectionDetailPage() {
         <div className="flex flex-col gap-2">
           {collection.bookmarks.map(({ bookmark }) => (
             <div key={bookmark.id} className="relative">
-              <BookmarkCard {...bookmark} />
+              <BookmarkCard {...bookmark} onDelete={() => loadCollection()} />
               <button
                 onClick={() => handleRemoveBookmark(bookmark.id)}
                 aria-label="Remove from collection"
