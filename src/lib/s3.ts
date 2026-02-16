@@ -35,7 +35,8 @@ function getPublicUrl(key: string): string {
  */
 export async function uploadImageToS3(
   imageUrl: string,
-  key: string
+  key: string,
+  minSize: number = 100
 ): Promise<string | null> {
   if (!s3Client) return null;
 
@@ -52,7 +53,7 @@ export async function uploadImageToS3(
     const body = Buffer.from(arrayBuffer);
 
     // Skip tiny responses (likely error pages, not real images)
-    if (body.length < 100) return null;
+    if (body.length < minSize) return null;
 
     await s3Client.send(
       new PutObjectCommand({
