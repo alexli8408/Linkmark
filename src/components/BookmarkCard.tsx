@@ -14,6 +14,7 @@ interface BookmarkCardProps {
   title: string | null;
   description: string | null;
   favicon: string | null;
+  previewImage: string | null;
   note: string | null;
   createdAt: string;
   tags?: BookmarkTag[];
@@ -26,6 +27,7 @@ export default function BookmarkCard({
   title,
   description,
   favicon,
+  previewImage,
   note,
   createdAt,
   tags,
@@ -56,7 +58,20 @@ export default function BookmarkCard({
   }
 
   return (
-    <div className="group flex items-start gap-3 rounded-lg border border-zinc-200 bg-white p-4 transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+    <div className="group overflow-hidden rounded-lg border border-zinc-200 bg-white transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+      {/* Preview image */}
+      {previewImage && (
+        <img
+          src={previewImage}
+          alt=""
+          className="h-32 w-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
+        />
+      )}
+
+      <div className="flex items-start gap-3 p-4">
       {/* Favicon */}
       {favicon && (
         <img
@@ -128,6 +143,7 @@ export default function BookmarkCard({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </button>
+      </div>
       </div>
     </div>
   );

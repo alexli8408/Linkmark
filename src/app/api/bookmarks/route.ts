@@ -67,23 +67,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "URL is required" }, { status: 400 });
   }
 
-  // Auto-fetch metadata if title not provided
-  let finalTitle = title ?? null;
-  let description: string | null = null;
-  let favicon: string | null = null;
-
-  if (!finalTitle) {
-    const metadata = await fetchMetadata(url);
-    finalTitle = metadata.title;
-    description = metadata.description;
-    favicon = metadata.favicon;
-  } else {
-    try {
-      favicon = `${new URL(url).origin}/favicon.ico`;
-    } catch {
-      // invalid URL, skip favicon
-    }
-  }
+  // Always fetch metadata for images; use provided title if given
+  const metadata = await fetchMetadata(url);
+  const finalTitle = title ?? metadata.title;
+  const description = metadata.description;
+  const favicon = metadata.favicon;
+  const previewImage = metadata.previewImage;
 
   const bookmark = await prisma.bookmark.create({
     data: {
@@ -91,6 +80,7 @@ export async function POST(req: NextRequest) {
       title: finalTitle,
       description,
       favicon,
+      previewImage,
       note: note ?? null,
       userId: session.user.id,
       tags: tags?.length
