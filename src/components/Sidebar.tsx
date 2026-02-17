@@ -13,6 +13,8 @@ interface Tag {
 const navItems = [
   { href: "/dashboard", label: "All Bookmarks" },
   { href: "/dashboard/collections", label: "Collections" },
+  { href: "/dashboard/import-export", label: "Import / Export" },
+  { href: "/dashboard/settings", label: "Settings" },
 ];
 
 export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {

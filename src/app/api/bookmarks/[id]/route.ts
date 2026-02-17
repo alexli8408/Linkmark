@@ -46,11 +46,12 @@ export async function PATCH(
   }
 
   const body = await req.json();
-  const { url, title, note, tags } = body as {
+  const { url, title, note, tags, isPublic } = body as {
     url?: string;
     title?: string;
     note?: string;
     tags?: string[];
+    isPublic?: boolean;
   };
 
   // If tags are provided, replace all existing tag associations
@@ -81,6 +82,7 @@ export async function PATCH(
       ...(url !== undefined && { url }),
       ...(title !== undefined && { title }),
       ...(note !== undefined && { note }),
+      ...(isPublic !== undefined && { isPublic }),
     },
     include: { tags: { include: { tag: true } } },
   });

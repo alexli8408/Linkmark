@@ -15,6 +15,8 @@ export default function EditBookmarkPage() {
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [isPublic, setIsPublic] = useState(false);
+  const [bookmarkId, setBookmarkId] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +36,8 @@ export default function EditBookmarkPage() {
       setTags(
         data.tags?.map((bt: { tag: { name: string } }) => bt.tag.name) ?? []
       );
+      setIsPublic(data.isPublic ?? false);
+      setBookmarkId(data.id);
       setLoading(false);
     }
     load();
@@ -48,7 +52,7 @@ export default function EditBookmarkPage() {
       const res = await fetch(`/api/bookmarks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, title, note, tags }),
+        body: JSON.stringify({ url, title, note, tags, isPublic }),
       });
 
       if (!res.ok) {
@@ -138,6 +142,38 @@ export default function EditBookmarkPage() {
           </label>
           <TagInput tags={tags} onChange={setTags} />
         </div>
+
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={isPublic}
+            onChange={(e) => setIsPublic(e.target.checked)}
+            className="rounded border-zinc-300"
+          />
+          <span className="text-zinc-700 dark:text-zinc-300">
+            Make this bookmark public
+          </span>
+        </label>
+
+        {isPublic && bookmarkId && (
+          <div className="flex items-center gap-2 rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-800 dark:bg-zinc-900">
+            <span className="truncate text-xs text-zinc-500">
+              {typeof window !== "undefined" && window.location.origin}/shared/bookmark/{bookmarkId}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/shared/bookmark/${bookmarkId}`
+                );
+                toast.success("Link copied");
+              }}
+              className="shrink-0 text-xs text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+            >
+              Copy
+            </button>
+          </div>
+        )}
 
         {error && (
           <p className="text-sm text-red-600 dark:text-red-400">{error}</p>

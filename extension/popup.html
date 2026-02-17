@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=320">
+  <link rel="stylesheet" href="popup.css">
+  <title>Linkmark</title>
+</head>
+<body>
+  <!-- Setup View -->
+  <div id="setup" class="view">
+    <h1>Linkmark</h1>
+    <p class="subtitle">Connect to your Linkmark instance</p>
+    <label for="serverUrl">Server URL</label>
+    <input id="serverUrl" type="url" placeholder="https://linkmark-alexli.vercel.app">
+    <label for="apiKey">API Key</label>
+    <input id="apiKey" type="password" placeholder="Paste your API key">
+    <p class="hint">Generate a key in Settings &rarr; API Keys</p>
+    <button id="saveSettings">Save</button>
+    <p id="setupError" class="error"></p>
+  </div>
+
+  <!-- Form View -->
+  <div id="form" class="view hidden">
+    <h1>Linkmark</h1>
+    <label for="url">URL</label>
+    <input id="url" type="url" readonly>
+    <label for="title">Title</label>
+    <input id="title" type="text" placeholder="Page title">
+    <label for="tags">Tags</label>
+    <input id="tags" type="text" placeholder="Comma-separated tags">
+    <label for="note">Note</label>
+    <textarea id="note" rows="2" placeholder="Optional note"></textarea>
+    <button id="saveBookmark">Save Bookmark</button>
+    <p id="formError" class="error"></p>
+    <p id="alreadySaved" class="info hidden">Already saved</p>
+    <button id="openSettings" class="link-btn">Settings</button>
+  </div>
+
+  <!-- Success View -->
+  <div id="success" class="view hidden">
+    <h1>Linkmark</h1>
+    <p class="success-msg">Bookmark saved!</p>
+    <button id="closeSuccess">Done</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

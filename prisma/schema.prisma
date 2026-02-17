@@ -60,6 +60,7 @@ model User {
   bookmarks   Bookmark[]
   tags        Tag[]
   collections Collection[]
+  apiKeys     ApiKey[]
 }
 
 model Bookmark {
@@ -118,6 +119,19 @@ model Collection {
 
   bookmarks CollectionBookmark[]
 
+  @@index([userId])
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  name      String   @default("Chrome Extension")
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([key])
   @@index([userId])
 }
 
