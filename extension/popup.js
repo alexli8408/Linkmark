@@ -9,10 +9,16 @@ const views = {
 };
 
 async function init() {
-  const { serverUrl, apiKey } = await chrome.storage.sync.get([
-    "serverUrl",
-    "apiKey",
-  ]);
+  let serverUrl, apiKey;
+  try {
+    ({ serverUrl, apiKey } = await chrome.storage.sync.get([
+      "serverUrl",
+      "apiKey",
+    ]));
+  } catch {
+    views.show("setup");
+    return;
+  }
 
   if (!serverUrl || !apiKey) {
     views.show("setup");
@@ -22,22 +28,24 @@ async function init() {
   views.show("form");
 
   // Get current tab info
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  $("url").value = tab.url || "";
-  $("title").value = tab.title || "";
-
-  // Check if already saved
   try {
-    const res = await fetch(
-      `${serverUrl}/api/extension/bookmarks?url=${encodeURIComponent(tab.url)}`,
-      { headers: { Authorization: `Bearer ${apiKey}` } }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      if (data.exists) {
-        $("alreadySaved").classList.remove("hidden");
-        $("saveBookmark").textContent = "Already Saved";
-        $("saveBookmark").disabled = true;
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    $("url").value = tab?.url || "";
+    $("title").value = tab?.title || "";
+
+    // Check if already saved
+    if (tab?.url) {
+      const res = await fetch(
+        `${serverUrl}/api/extension/bookmarks?url=${encodeURIComponent(tab.url)}`,
+        { headers: { Authorization: `Bearer ${apiKey}` } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data.exists) {
+          $("alreadySaved").classList.remove("hidden");
+          $("saveBookmark").textContent = "Already Saved";
+          $("saveBookmark").disabled = true;
+        }
       }
     }
   } catch {
