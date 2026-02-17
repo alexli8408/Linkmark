@@ -1,7 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "./Sidebar";
+import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 interface DashboardShellProps {
   navbar: React.ReactNode;
@@ -9,7 +12,23 @@ interface DashboardShellProps {
 }
 
 export default function DashboardShell({ navbar, children }: DashboardShellProps) {
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
+
+  const shortcuts = useMemo(
+    () => ({
+      "mod+n": () => router.push("/dashboard/new"),
+      "?": () => setShortcutsOpen((prev) => !prev),
+      escape: () => {
+        setShortcutsOpen(false);
+        setSidebarOpen(false);
+      },
+    }),
+    [router]
+  );
+
+  useKeyboardShortcuts(shortcuts);
 
   return (
     <div className="flex h-screen flex-col">
@@ -53,6 +72,8 @@ export default function DashboardShell({ navbar, children }: DashboardShellProps
           {children}
         </main>
       </div>
+
+      <KeyboardShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
     </div>
   );
 }

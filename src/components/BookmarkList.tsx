@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BookmarkCard from "./BookmarkCard";
 import { BookmarkListSkeleton } from "./Skeleton";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 interface BookmarkTag {
   tag: { id: string; name: string };
@@ -31,6 +32,15 @@ export default function BookmarkList() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchQuery);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const shortcuts = useMemo(
+    () => ({
+      "mod+k": () => searchRef.current?.focus(),
+    }),
+    []
+  );
+  useKeyboardShortcuts(shortcuts);
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {
@@ -78,6 +88,7 @@ export default function BookmarkList() {
       <form onSubmit={handleSearch} className="mb-4">
         <div className="flex gap-2">
           <input
+            ref={searchRef}
             type="text"
             placeholder="Search bookmarks..."
             aria-label="Search bookmarks"
