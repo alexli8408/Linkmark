@@ -25,6 +25,7 @@ interface BookmarkCardProps {
   selectable?: boolean;
   selected?: boolean;
   onSelect?: (id: string) => void;
+  metadataStatus?: string;
 }
 
 export default function BookmarkCard({
@@ -42,6 +43,7 @@ export default function BookmarkCard({
   selectable,
   selected,
   onSelect,
+  metadataStatus,
 }: BookmarkCardProps) {
   const router = useRouter();
   const toast = useToast();
@@ -89,7 +91,9 @@ export default function BookmarkCard({
           </div>
         )}
         {/* Preview image */}
-        {previewImage && (
+        {metadataStatus === "pending" && !previewImage ? (
+          <div className="h-32 w-full animate-pulse bg-zinc-100 dark:bg-zinc-800" />
+        ) : previewImage ? (
           <img
             src={previewImage}
             alt=""
@@ -98,11 +102,13 @@ export default function BookmarkCard({
               (e.target as HTMLImageElement).style.display = "none";
             }}
           />
-        )}
+        ) : null}
 
         <div className="flex items-start gap-3 p-4">
           {/* Favicon */}
-          {favicon && (
+          {metadataStatus === "pending" && !favicon ? (
+            <div className="mt-0.5 h-5 w-5 shrink-0 animate-pulse rounded bg-zinc-200 dark:bg-zinc-700" />
+          ) : favicon ? (
             <img
               src={favicon}
               alt=""
@@ -111,7 +117,7 @@ export default function BookmarkCard({
                 (e.target as HTMLImageElement).style.display = "none";
               }}
             />
-          )}
+          ) : null}
 
           {/* Content */}
           <div className="min-w-0 flex-1">

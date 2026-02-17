@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { fetchMetadata } from "@/lib/fetchMetadata";
 import { searchBookmarks } from "@/lib/searchBookmarks";
+import { invokeMetadataFetcher } from "@/lib/invokeLambda";
 
 // GET /api/bookmarks — list all bookmarks for the current user
 export async function GET(req: NextRequest) {
@@ -79,21 +80,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "URL is required" }, { status: 400 });
   }
 
-  // Always fetch metadata for images; use provided title if given
-  const metadata = await fetchMetadata(url);
-  const finalTitle = title ?? metadata.title;
-  const description = metadata.description;
-  const favicon = metadata.favicon;
-  const previewImage = metadata.previewImage;
-
+  // Create bookmark immediately with pending metadata
   const bookmark = await prisma.bookmark.create({
     data: {
       url,
-      title: finalTitle,
-      description,
-      favicon,
-      previewImage,
+      title: title ?? null,
       note: note ?? null,
+      metadataStatus: "pending",
       userId: session.user.id,
       tags: tags?.length
         ? {
@@ -114,6 +107,26 @@ export async function POST(req: NextRequest) {
     },
     include: { tags: { include: { tag: true } } },
   });
+
+  // Try async Lambda invocation; fall back to sync fetch if not configured
+  const lambdaInvoked = await invokeMetadataFetcher(bookmark.id, url).catch(() => false);
+
+  if (!lambdaInvoked) {
+    // Local dev fallback: fetch metadata synchronously
+    const metadata = await fetchMetadata(url);
+    const updated = await prisma.bookmark.update({
+      where: { id: bookmark.id },
+      data: {
+        title: title ?? metadata.title,
+        description: metadata.description,
+        favicon: metadata.favicon,
+        previewImage: metadata.previewImage,
+        metadataStatus: "complete",
+      },
+      include: { tags: { include: { tag: true } } },
+    });
+    return NextResponse.json(updated, { status: 201 });
+  }
 
   return NextResponse.json(bookmark, { status: 201 });
 }

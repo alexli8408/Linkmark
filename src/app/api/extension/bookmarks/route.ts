@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authApiKey } from "@/lib/authApiKey";
 import { fetchMetadata } from "@/lib/fetchMetadata";
+import { invokeMetadataFetcher } from "@/lib/invokeLambda";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -78,17 +79,12 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const metadata = await fetchMetadata(url);
-  const finalTitle = title || metadata.title;
-
   const bookmark = await prisma.bookmark.create({
     data: {
       url,
-      title: finalTitle,
-      description: metadata.description,
-      favicon: metadata.favicon,
-      previewImage: metadata.previewImage,
+      title: title || null,
       note: note ?? null,
+      metadataStatus: "pending",
       userId: user.id,
       tags: tags?.length
         ? {
@@ -109,6 +105,24 @@ export async function POST(req: NextRequest) {
     },
     include: { tags: { include: { tag: true } } },
   });
+
+  const lambdaInvoked = await invokeMetadataFetcher(bookmark.id, url).catch(() => false);
+
+  if (!lambdaInvoked) {
+    const metadata = await fetchMetadata(url);
+    const updated = await prisma.bookmark.update({
+      where: { id: bookmark.id },
+      data: {
+        title: title || metadata.title,
+        description: metadata.description,
+        favicon: metadata.favicon,
+        previewImage: metadata.previewImage,
+        metadataStatus: "complete",
+      },
+      include: { tags: { include: { tag: true } } },
+    });
+    return NextResponse.json(updated, { status: 201, headers: corsHeaders });
+  }
 
   return NextResponse.json(bookmark, { status: 201, headers: corsHeaders });
 }

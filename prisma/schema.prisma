@@ -64,16 +64,17 @@ model User {
 }
 
 model Bookmark {
-  id           String   @id @default(cuid())
-  url          String
-  title        String?
-  description  String?
-  favicon      String?
-  previewImage String?
-  note         String?  @db.Text
-  isPublic     Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String   @id @default(cuid())
+  url            String
+  title          String?
+  description    String?
+  favicon        String?
+  previewImage   String?
+  note           String?  @db.Text
+  isPublic       Boolean  @default(false)
+  metadataStatus String   @default("pending")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

@@ -24,6 +24,7 @@ interface Bookmark {
   note: string | null;
   createdAt: string;
   tags: BookmarkTag[];
+  metadataStatus?: string;
 }
 
 export default function BookmarkList() {
@@ -141,6 +142,29 @@ export default function BookmarkList() {
     }
     load();
   }, [sort, tagFilter, searchQuery]);
+
+  // Poll for pending metadata updates
+  useEffect(() => {
+    const hasPending = bookmarks.some((b) => b.metadataStatus === "pending");
+    if (!hasPending) return;
+
+    const interval = setInterval(async () => {
+      const params = new URLSearchParams();
+      params.set("sort", sort);
+      if (tagFilter) params.set("tag", tagFilter);
+      if (searchQuery) params.set("q", searchQuery);
+
+      const res = await fetch(`/api/bookmarks?${params.toString()}`);
+      const data = await res.json();
+      setBookmarks(data);
+
+      if (!data.some((b: Bookmark) => b.metadataStatus === "pending")) {
+        clearInterval(interval);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [bookmarks, sort, tagFilter, searchQuery]);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
