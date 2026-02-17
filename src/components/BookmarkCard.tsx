@@ -22,6 +22,9 @@ interface BookmarkCardProps {
   tags?: BookmarkTag[];
   onTagClick?: (tag: string) => void;
   onDelete?: (id: string) => void;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: (id: string) => void;
 }
 
 export default function BookmarkCard({
@@ -36,6 +39,9 @@ export default function BookmarkCard({
   tags,
   onTagClick,
   onDelete,
+  selectable,
+  selected,
+  onSelect,
 }: BookmarkCardProps) {
   const router = useRouter();
   const toast = useToast();
@@ -66,7 +72,22 @@ export default function BookmarkCard({
 
   return (
     <>
-      <div className="group overflow-hidden rounded-lg border border-zinc-200 bg-white transition-colors hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+      <div className={`group overflow-hidden rounded-lg border transition-colors ${
+        selected
+          ? "border-zinc-500 bg-zinc-50 dark:border-zinc-500 dark:bg-zinc-800/50"
+          : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
+      }`}>
+        {selectable && (
+          <div className="flex items-center px-4 pt-3">
+            <input
+              type="checkbox"
+              checked={selected}
+              onChange={() => onSelect?.(id)}
+              className="h-4 w-4 rounded border-zinc-300 dark:border-zinc-600"
+              aria-label={`Select bookmark: ${title || url}`}
+            />
+          </div>
+        )}
         {/* Preview image */}
         {previewImage && (
           <img

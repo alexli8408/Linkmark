@@ -5,6 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import BookmarkCard from "./BookmarkCard";
 import { BookmarkListSkeleton } from "./Skeleton";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import BulkActionToolbar from "./BulkActionToolbar";
+import BulkTagModal from "./BulkTagModal";
+import BulkCollectionModal from "./BulkCollectionModal";
+import { useToast } from "./Toast";
 
 interface BookmarkTag {
   tag: { id: string; name: string };
@@ -24,6 +28,7 @@ interface Bookmark {
 
 export default function BookmarkList() {
   const router = useRouter();
+  const toast = useToast();
   const searchParams = useSearchParams();
   const sort = searchParams.get("sort") ?? "newest";
   const tagFilter = searchParams.get("tag") ?? "";
@@ -34,13 +39,77 @@ export default function BookmarkList() {
   const [search, setSearch] = useState(searchQuery);
   const searchRef = useRef<HTMLInputElement>(null);
 
+  // Bulk selection state
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showBulkTagModal, setShowBulkTagModal] = useState(false);
+  const [showBulkCollectionModal, setShowBulkCollectionModal] = useState(false);
+
   const shortcuts = useMemo(
     () => ({
       "mod+k": () => searchRef.current?.focus(),
+      escape: () => {
+        if (selectMode) {
+          setSelectMode(false);
+          setSelectedIds(new Set());
+        }
+      },
     }),
-    []
+    [selectMode]
   );
   useKeyboardShortcuts(shortcuts);
+
+  function toggleSelect(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function exitSelectMode() {
+    setSelectMode(false);
+    setSelectedIds(new Set());
+  }
+
+  async function handleBulkDelete() {
+    const ids = Array.from(selectedIds);
+    await fetch("/api/bookmarks/bulk", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    setBookmarks((prev) => prev.filter((b) => !selectedIds.has(b.id)));
+    toast.success(`Deleted ${ids.length} bookmark${ids.length !== 1 ? "s" : ""}`);
+    exitSelectMode();
+  }
+
+  async function handleBulkAddTags(tags: string[]) {
+    const ids = Array.from(selectedIds);
+    await fetch("/api/bookmarks/bulk/tags", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids, tags }),
+    });
+    toast.success(`Added tags to ${ids.length} bookmark${ids.length !== 1 ? "s" : ""}`);
+    setShowBulkTagModal(false);
+    exitSelectMode();
+    // Reload to show updated tags
+    router.refresh();
+  }
+
+  async function handleBulkAddToCollection(collectionId: string) {
+    const ids = Array.from(selectedIds);
+    await fetch("/api/bookmarks/bulk/collection", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids, collectionId }),
+    });
+    toast.success(`Added ${ids.length} bookmark${ids.length !== 1 ? "s" : ""} to collection`);
+    setShowBulkCollectionModal(false);
+    exitSelectMode();
+  }
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {
@@ -136,7 +205,7 @@ export default function BookmarkList() {
         </div>
       )}
 
-      {/* Sort controls */}
+      {/* Sort controls + Select toggle */}
       <div className="mb-4 flex items-center gap-2">
         <span className="text-xs text-zinc-500 dark:text-zinc-400">Sort by:</span>
         {(["newest", "oldest", "title"] as const).map((s) => (
@@ -153,7 +222,49 @@ export default function BookmarkList() {
             {s.charAt(0).toUpperCase() + s.slice(1)}
           </button>
         ))}
+        <div className="ml-auto flex gap-2">
+          {selectMode && bookmarks.length > 0 && (
+            <button
+              onClick={() => {
+                if (selectedIds.size === bookmarks.length) {
+                  setSelectedIds(new Set());
+                } else {
+                  setSelectedIds(new Set(bookmarks.map((b) => b.id)));
+                }
+              }}
+              className="rounded-md px-2 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            >
+              {selectedIds.size === bookmarks.length ? "Deselect All" : "Select All"}
+            </button>
+          )}
+          <button
+            onClick={() => {
+              if (selectMode) exitSelectMode();
+              else setSelectMode(true);
+            }}
+            className={`rounded-md px-2 py-1 text-xs font-medium ${
+              selectMode
+                ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            }`}
+          >
+            {selectMode ? "Cancel" : "Select"}
+          </button>
+        </div>
       </div>
+
+      {/* Bulk action toolbar */}
+      {selectMode && selectedIds.size > 0 && (
+        <div className="mb-4">
+          <BulkActionToolbar
+            selectedCount={selectedIds.size}
+            onDelete={handleBulkDelete}
+            onAddTag={() => setShowBulkTagModal(true)}
+            onMoveToCollection={() => setShowBulkCollectionModal(true)}
+            onDeselectAll={exitSelectMode}
+          />
+        </div>
+      )}
 
       {/* Bookmark list */}
       {loading ? (
@@ -172,10 +283,24 @@ export default function BookmarkList() {
               {...bookmark}
               onTagClick={handleTagClick}
               onDelete={(id) => setBookmarks((prev) => prev.filter((b) => b.id !== id))}
+              selectable={selectMode}
+              selected={selectedIds.has(bookmark.id)}
+              onSelect={toggleSelect}
             />
           ))}
         </div>
       )}
+
+      <BulkTagModal
+        open={showBulkTagModal}
+        onConfirm={handleBulkAddTags}
+        onCancel={() => setShowBulkTagModal(false)}
+      />
+      <BulkCollectionModal
+        open={showBulkCollectionModal}
+        onConfirm={handleBulkAddToCollection}
+        onCancel={() => setShowBulkCollectionModal(false)}
+      />
     </div>
   );
 }
