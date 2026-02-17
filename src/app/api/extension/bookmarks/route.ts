@@ -3,14 +3,22 @@ import { prisma } from "@/lib/prisma";
 import { authApiKey } from "@/lib/authApiKey";
 import { createBookmarkWithMetadata } from "@/lib/createBookmark";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-};
+function getCorsHeaders(req?: Request) {
+  const origin = req?.headers.get("origin") ?? "";
+  const allowed =
+    origin.startsWith("chrome-extension://") ||
+    origin.startsWith("moz-extension://") ||
+    origin === (process.env.NEXTAUTH_URL ?? "");
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: corsHeaders });
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : "",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  };
+}
+
+export async function OPTIONS(req: NextRequest) {
+  return new NextResponse(null, { status: 204, headers: getCorsHeaders(req) });
 }
 
 // GET /api/extension/bookmarks?url=... — check if URL is already saved
@@ -19,7 +27,7 @@ export async function GET(req: NextRequest) {
   if (!user) {
     return NextResponse.json(
       { error: "Unauthorized" },
-      { status: 401, headers: corsHeaders }
+      { status: 401, headers: getCorsHeaders(req) }
     );
   }
 
@@ -27,7 +35,7 @@ export async function GET(req: NextRequest) {
   if (!url) {
     return NextResponse.json(
       { error: "URL required" },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: getCorsHeaders(req) }
     );
   }
 
@@ -38,7 +46,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(
     { exists: !!bookmark, bookmark },
-    { headers: corsHeaders }
+    { headers: getCorsHeaders(req) }
   );
 }
 
@@ -48,7 +56,7 @@ export async function POST(req: NextRequest) {
   if (!user) {
     return NextResponse.json(
       { error: "Unauthorized" },
-      { status: 401, headers: corsHeaders }
+      { status: 401, headers: getCorsHeaders(req) }
     );
   }
 
@@ -63,7 +71,7 @@ export async function POST(req: NextRequest) {
   if (!url) {
     return NextResponse.json(
       { error: "URL is required" },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: getCorsHeaders(req) }
     );
   }
 
@@ -74,7 +82,7 @@ export async function POST(req: NextRequest) {
   if (existing) {
     return NextResponse.json(
       { error: "Bookmark already exists", bookmark: existing },
-      { status: 409, headers: corsHeaders }
+      { status: 409, headers: getCorsHeaders(req) }
     );
   }
 
@@ -86,5 +94,5 @@ export async function POST(req: NextRequest) {
     userId: user.id,
   });
 
-  return NextResponse.json(bookmark, { status: 201, headers: corsHeaders });
+  return NextResponse.json(bookmark, { status: 201, headers: getCorsHeaders(req) });
 }
