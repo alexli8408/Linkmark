@@ -28,7 +28,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
         <div className="grid gap-4 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="h-24 animate-pulse rounded-lg border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900" />
@@ -38,14 +38,23 @@ export default function AnalyticsPage() {
     );
   }
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div className="space-y-4">
+        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          Unable to load analytics data. Try refreshing the page.
+        </p>
+      </div>
+    );
+  }
 
   const maxBarCount = Math.max(...data.bookmarksOverTime.map((d) => d.count), 1);
   const maxTagCount = Math.max(...data.topTags.map((t) => t.count), 1);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+      <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-3">

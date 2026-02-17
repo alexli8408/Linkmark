@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { fetchMetadata } from "@/lib/fetchMetadata";
 import { searchBookmarks } from "@/lib/searchBookmarks";
-import { invokeMetadataFetcher } from "@/lib/invokeLambda";
+import { createBookmarkWithMetadata } from "@/lib/createBookmark";
 
 // GET /api/bookmarks — list all bookmarks for the current user
 export async function GET(req: NextRequest) {
@@ -80,53 +79,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "URL is required" }, { status: 400 });
   }
 
-  // Create bookmark immediately with pending metadata
-  const bookmark = await prisma.bookmark.create({
-    data: {
-      url,
-      title: title ?? null,
-      note: note ?? null,
-      metadataStatus: "pending",
-      userId: session.user.id,
-      tags: tags?.length
-        ? {
-            create: await Promise.all(
-              tags.map(async (name) => {
-                const tag = await prisma.tag.upsert({
-                  where: {
-                    name_userId: { name: name.toLowerCase(), userId: session.user!.id! },
-                  },
-                  update: {},
-                  create: { name: name.toLowerCase(), userId: session.user!.id! },
-                });
-                return { tagId: tag.id };
-              })
-            ),
-          }
-        : undefined,
-    },
-    include: { tags: { include: { tag: true } } },
+  const bookmark = await createBookmarkWithMetadata({
+    url,
+    title,
+    note,
+    tags,
+    userId: session.user.id,
   });
-
-  // Try async Lambda invocation; fall back to sync fetch if not configured
-  const lambdaInvoked = await invokeMetadataFetcher(bookmark.id, url).catch(() => false);
-
-  if (!lambdaInvoked) {
-    // Local dev fallback: fetch metadata synchronously
-    const metadata = await fetchMetadata(url);
-    const updated = await prisma.bookmark.update({
-      where: { id: bookmark.id },
-      data: {
-        title: title ?? metadata.title,
-        description: metadata.description,
-        favicon: metadata.favicon,
-        previewImage: metadata.previewImage,
-        metadataStatus: "complete",
-      },
-      include: { tags: { include: { tag: true } } },
-    });
-    return NextResponse.json(updated, { status: 201 });
-  }
 
   return NextResponse.json(bookmark, { status: 201 });
 }

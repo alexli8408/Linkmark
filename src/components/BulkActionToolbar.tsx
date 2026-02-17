@@ -29,25 +29,28 @@ export default function BulkActionToolbar({
         <div className="ml-auto flex gap-2">
           <button
             onClick={onAddTag}
-            className="rounded-md border border-zinc-300 px-3 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Add tags to selected bookmarks"
+            className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
           >
             Add Tags
           </button>
           <button
             onClick={onMoveToCollection}
-            className="rounded-md border border-zinc-300 px-3 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            aria-label="Add selected bookmarks to collection"
+            className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
           >
             Add to Collection
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="rounded-md bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-700"
+            aria-label="Delete selected bookmarks"
+            className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
           >
             Delete
           </button>
           <button
             onClick={onDeselectAll}
-            className="rounded-md px-2 py-1 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            className="rounded-md px-2 py-1.5 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             Cancel
           </button>

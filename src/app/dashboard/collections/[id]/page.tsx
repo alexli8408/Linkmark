@@ -18,22 +18,7 @@ import {
 import SortableBookmarkItem from "@/components/SortableBookmarkItem";
 import { useToast } from "@/components/Toast";
 import { BookmarkListSkeleton } from "@/components/Skeleton";
-
-interface BookmarkTag {
-  tag: { id: string; name: string };
-}
-
-interface Bookmark {
-  id: string;
-  url: string;
-  title: string | null;
-  description: string | null;
-  favicon: string | null;
-  previewImage: string | null;
-  note: string | null;
-  createdAt: string;
-  tags: BookmarkTag[];
-}
+import type { Bookmark } from "@/types/bookmark";
 
 interface Collection {
   id: string;

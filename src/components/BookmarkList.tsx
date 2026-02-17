@@ -9,23 +9,7 @@ import BulkActionToolbar from "./BulkActionToolbar";
 import BulkTagModal from "./BulkTagModal";
 import BulkCollectionModal from "./BulkCollectionModal";
 import { useToast } from "./Toast";
-
-interface BookmarkTag {
-  tag: { id: string; name: string };
-}
-
-interface Bookmark {
-  id: string;
-  url: string;
-  title: string | null;
-  description: string | null;
-  favicon: string | null;
-  previewImage: string | null;
-  note: string | null;
-  createdAt: string;
-  tags: BookmarkTag[];
-  metadataStatus?: string;
-}
+import type { Bookmark } from "@/types/bookmark";
 
 export default function BookmarkList() {
   const router = useRouter();

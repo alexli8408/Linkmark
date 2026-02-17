@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { authApiKey } from "@/lib/authApiKey";
-import { fetchMetadata } from "@/lib/fetchMetadata";
-import { invokeMetadataFetcher } from "@/lib/invokeLambda";
+import { createBookmarkWithMetadata } from "@/lib/createBookmark";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -79,50 +78,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const bookmark = await prisma.bookmark.create({
-    data: {
-      url,
-      title: title || null,
-      note: note ?? null,
-      metadataStatus: "pending",
-      userId: user.id,
-      tags: tags?.length
-        ? {
-            create: await Promise.all(
-              tags.map(async (name) => {
-                const tag = await prisma.tag.upsert({
-                  where: {
-                    name_userId: { name: name.toLowerCase(), userId: user.id },
-                  },
-                  update: {},
-                  create: { name: name.toLowerCase(), userId: user.id },
-                });
-                return { tagId: tag.id };
-              })
-            ),
-          }
-        : undefined,
-    },
-    include: { tags: { include: { tag: true } } },
+  const bookmark = await createBookmarkWithMetadata({
+    url,
+    title,
+    note,
+    tags,
+    userId: user.id,
   });
-
-  const lambdaInvoked = await invokeMetadataFetcher(bookmark.id, url).catch(() => false);
-
-  if (!lambdaInvoked) {
-    const metadata = await fetchMetadata(url);
-    const updated = await prisma.bookmark.update({
-      where: { id: bookmark.id },
-      data: {
-        title: title || metadata.title,
-        description: metadata.description,
-        favicon: metadata.favicon,
-        previewImage: metadata.previewImage,
-        metadataStatus: "complete",
-      },
-      include: { tags: { include: { tag: true } } },
-    });
-    return NextResponse.json(updated, { status: 201, headers: corsHeaders });
-  }
 
   return NextResponse.json(bookmark, { status: 201, headers: corsHeaders });
 }

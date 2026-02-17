@@ -3,23 +3,10 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import BookmarkCard from "./BookmarkCard";
-
-interface BookmarkTag {
-  tag: { id: string; name: string };
-}
+import type { Bookmark } from "@/types/bookmark";
 
 interface SortableBookmarkItemProps {
-  bookmark: {
-    id: string;
-    url: string;
-    title: string | null;
-    description: string | null;
-    favicon: string | null;
-    previewImage: string | null;
-    note: string | null;
-    createdAt: string;
-    tags: BookmarkTag[];
-  };
+  bookmark: Bookmark;
   onRemove: (id: string) => void;
   onDelete: () => void;
 }

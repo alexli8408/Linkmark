@@ -5,10 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "./Toast";
 import ConfirmModal from "./ConfirmModal";
-
-interface BookmarkTag {
-  tag: { id: string; name: string };
-}
+import type { BookmarkTag } from "@/types/bookmark";
 
 interface BookmarkCardProps {
   id: string;
@@ -158,6 +155,11 @@ export default function BookmarkCard({
             <p className="mt-2 text-xs text-zinc-400">
               {new Date(createdAt).toLocaleDateString()}
             </p>
+            {metadataStatus === "failed" && (
+              <p className="mt-1 text-xs text-zinc-400 italic">
+                Metadata unavailable
+              </p>
+            )}
           </div>
 
           {/* Actions — always visible on mobile, hover on desktop */}

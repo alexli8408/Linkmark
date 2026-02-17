@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface Tag {
   id: string;
@@ -19,9 +19,18 @@ const navItems = [
 ];
 
 export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeTag = searchParams.get("tag") ?? "";
   const [tags, setTags] = useState<Tag[]>([]);
+  const [tagsLoading, setTagsLoading] = useState(true);
+
+  function isActive(href: string) {
+    if (href === "/dashboard") {
+      return pathname === "/dashboard" && !activeTag;
+    }
+    return pathname.startsWith(href);
+  }
 
   useEffect(() => {
     async function loadTags() {
@@ -33,6 +42,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         }
       } catch {
         // ignore
+      } finally {
+        setTagsLoading(false);
       }
     }
     loadTags();
@@ -46,14 +57,32 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             key={item.href}
             href={item.href}
             onClick={onNavigate}
-            className="rounded-md px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className={`rounded-md px-3 py-2 text-sm font-medium ${
+              isActive(item.href)
+                ? "bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50"
+                : "text-zinc-700 hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            }`}
           >
             {item.label}
           </Link>
         ))}
       </nav>
 
-      {tags.length > 0 && (
+      {/* Tags loading skeleton */}
+      {tagsLoading && (
+        <div className="mt-6">
+          <div className="mb-2 px-3">
+            <div className="h-3 w-10 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+          </div>
+          <div className="flex flex-col gap-1 px-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-6 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {!tagsLoading && tags.length > 0 && (
         <div className="mt-6">
           <h3 id="tags-heading" className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Tags
