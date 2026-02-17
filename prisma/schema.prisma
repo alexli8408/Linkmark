@@ -138,9 +138,11 @@ model ApiKey {
 model CollectionBookmark {
   collectionId String
   bookmarkId   String
+  position     Int    @default(0)
 
   collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   bookmark   Bookmark   @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
 
   @@id([collectionId, bookmarkId])
+  @@index([collectionId, position])
 }

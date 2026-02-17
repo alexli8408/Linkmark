@@ -43,8 +43,14 @@ export async function POST(
     return NextResponse.json({ error: "Already in collection" }, { status: 409 });
   }
 
+  const maxPos = await prisma.collectionBookmark.aggregate({
+    where: { collectionId: id },
+    _max: { position: true },
+  });
+  const nextPosition = (maxPos._max.position ?? -1) + 1;
+
   await prisma.collectionBookmark.create({
-    data: { collectionId: id, bookmarkId },
+    data: { collectionId: id, bookmarkId, position: nextPosition },
   });
 
   return NextResponse.json({ success: true }, { status: 201 });

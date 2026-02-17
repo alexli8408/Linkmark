@@ -2,7 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import BookmarkCard from "@/components/BookmarkCard";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableBookmarkItem from "@/components/SortableBookmarkItem";
 import { useToast } from "@/components/Toast";
 import { BookmarkListSkeleton } from "@/components/Skeleton";
 
@@ -41,6 +54,7 @@ export default function CollectionDetailPage() {
   const { id } = useParams<{ id: string }>();
 
   const [collection, setCollection] = useState<Collection | null>(null);
+  const [orderedBookmarks, setOrderedBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [editName, setEditName] = useState("");
@@ -51,6 +65,10 @@ export default function CollectionDetailPage() {
   const [showAddPicker, setShowAddPicker] = useState(false);
   const [allBookmarks, setAllBookmarks] = useState<AvailableBookmark[]>([]);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
+
   async function loadCollection() {
     const res = await fetch(`/api/collections/${id}`);
     if (!res.ok) {
@@ -59,10 +77,27 @@ export default function CollectionDetailPage() {
     }
     const data = await res.json();
     setCollection(data);
+    setOrderedBookmarks(data.bookmarks.map((b: { bookmark: Bookmark }) => b.bookmark));
     setEditName(data.name);
     setEditDescription(data.description ?? "");
     setEditIsPublic(data.isPublic ?? false);
     setLoading(false);
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = orderedBookmarks.findIndex((b) => b.id === active.id);
+    const newIndex = orderedBookmarks.findIndex((b) => b.id === over.id);
+    const newOrder = arrayMove(orderedBookmarks, oldIndex, newIndex);
+    setOrderedBookmarks(newOrder);
+
+    fetch(`/api/collections/${id}/bookmarks/reorder`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderedBookmarkIds: newOrder.map((b) => b.id) }),
+    }).catch(() => toast.error("Failed to save order"));
   }
 
   useEffect(() => {
@@ -274,27 +309,25 @@ export default function CollectionDetailPage() {
       )}
 
       {/* Bookmarks in collection */}
-      {collection.bookmarks.length === 0 ? (
+      {orderedBookmarks.length === 0 ? (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           This collection is empty. Add some bookmarks to it.
         </p>
       ) : (
-        <div className="flex flex-col gap-2">
-          {collection.bookmarks.map(({ bookmark }) => (
-            <div key={bookmark.id} className="relative">
-              <BookmarkCard {...bookmark} onDelete={() => loadCollection()} />
-              <button
-                onClick={() => handleRemoveBookmark(bookmark.id)}
-                aria-label="Remove from collection"
-                className="absolute right-12 top-4 rounded p-1 text-zinc-400 opacity-100 hover:bg-red-50 hover:text-red-600 md:opacity-0 md:hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={orderedBookmarks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
+            <div className="flex flex-col gap-2">
+              {orderedBookmarks.map((bookmark) => (
+                <SortableBookmarkItem
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  onRemove={handleRemoveBookmark}
+                  onDelete={() => loadCollection()}
+                />
+              ))}
             </div>
-          ))}
-        </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   );

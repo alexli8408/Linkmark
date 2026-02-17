@@ -22,6 +22,7 @@ export async function GET(
             include: { tags: { include: { tag: true } } },
           },
         },
+        orderBy: { position: "asc" },
       },
     },
   });
