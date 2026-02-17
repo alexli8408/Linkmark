@@ -41,3 +41,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# lambda build artifacts
+lambda/*/node_modules
+lambda/*/package-lock.json
+*.zip
