@@ -3,7 +3,7 @@
   "name": "Linkmark",
   "version": "1.0.0",
   "description": "Save bookmarks to Linkmark with one click",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
