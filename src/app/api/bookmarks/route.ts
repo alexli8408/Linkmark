@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { fetchMetadata } from "@/lib/fetchMetadata";
+import { searchBookmarks } from "@/lib/searchBookmarks";
 
 // GET /api/bookmarks — list all bookmarks for the current user
 export async function GET(req: NextRequest) {
@@ -14,6 +15,17 @@ export async function GET(req: NextRequest) {
   const sort = searchParams.get("sort") ?? "newest";
   const search = searchParams.get("q") ?? "";
   const tagFilter = searchParams.get("tag") ?? "";
+
+  // Use full-text search for queries with 2+ characters
+  if (search && search.length >= 2) {
+    const bookmarks = await searchBookmarks(
+      session.user.id,
+      search,
+      sort,
+      tagFilter || undefined
+    );
+    return NextResponse.json(bookmarks);
+  }
 
   const orderBy =
     sort === "oldest"
