@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Linkmark",
     description: "Save, organize, and find your bookmarks",
-    url: "https://linkmark-alexli.vercel.app",
+    url: "https://linkmark.tech",
     siteName: "Linkmark",
     type: "website",
   },
