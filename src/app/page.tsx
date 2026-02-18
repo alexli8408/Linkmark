@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { auth } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -7,6 +6,11 @@ export default async function Home() {
 
   if (session?.user) {
     redirect("/dashboard");
+  }
+
+  async function handleSignIn() {
+    "use server";
+    await signIn("github", { redirectTo: "/dashboard" });
   }
 
   return (
@@ -25,12 +29,14 @@ export default async function Home() {
             Linkmark
           </span>
         </div>
-        <Link
-          href="/login"
-          className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-        >
-          Sign in
-        </Link>
+        <form action={handleSignIn}>
+          <button
+            type="submit"
+            className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          >
+            Sign in
+          </button>
+        </form>
       </nav>
 
       <div className="flex flex-1 overflow-hidden">
@@ -117,12 +123,14 @@ export default async function Home() {
             <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               Sign in to get started.
             </p>
-            <Link
-              href="/login"
-              className="mt-6 rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-            >
-              Sign in with GitHub
-            </Link>
+            <form action={handleSignIn}>
+              <button
+                type="submit"
+                className="mt-6 rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+              >
+                Sign in with GitHub
+              </button>
+            </form>
           </div>
         </main>
       </div>

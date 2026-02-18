@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { auth, signOut } from "@/lib/auth";
+import { auth, signIn, signOut } from "@/lib/auth";
 
 export default async function Navbar() {
   const session = await auth();
@@ -39,12 +39,19 @@ export default async function Navbar() {
             </form>
           </>
         ) : (
-          <Link
-            href="/login"
-            className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          <form
+            action={async () => {
+              "use server";
+              await signIn("github", { redirectTo: "/dashboard" });
+            }}
           >
-            Sign in
-          </Link>
+            <button
+              type="submit"
+              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            >
+              Sign in
+            </button>
+          </form>
         )}
       </div>
     </nav>
