@@ -57,10 +57,7 @@ export default function NewBookmarkPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label
-            htmlFor="url"
-            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor="url" className="label-base">
             URL *
           </label>
           <input
@@ -70,15 +67,12 @@ export default function NewBookmarkPage() {
             placeholder="https://example.com"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="input-base"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="title"
-            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor="title" className="label-base">
             Title{" "}
             <span className="font-normal text-zinc-400">(auto-fetched if empty)</span>
           </label>
@@ -88,15 +82,12 @@ export default function NewBookmarkPage() {
             placeholder="Page title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="input-base"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="note"
-            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor="note" className="label-base">
             Note
           </label>
           <textarea
@@ -105,12 +96,12 @@ export default function NewBookmarkPage() {
             placeholder="Why is this link useful?"
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="input-base"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <label className="label-base">
             Tags
           </label>
           <TagInput tags={tags} onChange={setTags} />
@@ -125,14 +116,14 @@ export default function NewBookmarkPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="btn-primary disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Bookmark"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="btn-secondary"
           >
             Cancel
           </button>

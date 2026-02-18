@@ -1,6 +1,5 @@
-interface BookmarkTag {
-  tag: { id: string; name: string };
-}
+import type { BookmarkTag } from "@/types/bookmark";
+import { getHostname } from "@/lib/utils";
 
 interface PublicBookmarkCardProps {
   url: string;
@@ -24,12 +23,7 @@ export default function PublicBookmarkCard({
   tags,
 }: PublicBookmarkCardProps) {
   const displayTitle = title || url;
-  let hostname: string;
-  try {
-    hostname = new URL(url).hostname;
-  } catch {
-    hostname = url;
-  }
+  const hostname = getHostname(url);
 
   return (
     <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
 
 interface KeyboardShortcutsModalProps {
   open: boolean;
@@ -8,7 +8,7 @@ interface KeyboardShortcutsModalProps {
 }
 
 const isMac = typeof navigator !== "undefined" && /Mac/.test(navigator.userAgent);
-const mod = isMac ? "⌘" : "Ctrl";
+const mod = isMac ? "\u2318" : "Ctrl";
 
 const shortcuts = [
   { keys: `${mod} + K`, description: "Focus search" },
@@ -18,14 +18,7 @@ const shortcuts = [
 ];
 
 export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortcutsModalProps) {
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
+  useEscapeKey(open, onClose);
 
   if (!open) return null;
 
@@ -57,7 +50,7 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
         <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="btn-secondary"
           >
             Close
           </button>

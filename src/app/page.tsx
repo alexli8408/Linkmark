@@ -1,5 +1,6 @@
 import { auth, signIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import LinkmarkIcon from "@/components/LinkmarkIcon";
 
 export default async function Home() {
   const session = await auth();
@@ -18,13 +19,7 @@ export default async function Home() {
       {/* Navbar */}
       <nav className="flex h-14 items-center justify-between border-b border-zinc-200 px-6 dark:border-zinc-800">
         <div className="flex items-center gap-2">
-          <svg width="24" height="24" viewBox="0 0 32 32" className="shrink-0">
-            <rect width="32" height="32" rx="8" fill="#18181b" />
-            <path
-              d="M9 6h14a1 1 0 0 1 1 1v20.2a0.8 0.8 0 0 1-1.2.7L16 24l-6.8 3.9A0.8 0.8 0 0 1 8 27.2V7a1 1 0 0 1 1-1z"
-              fill="#fafafa"
-            />
-          </svg>
+          <LinkmarkIcon size={24} className="shrink-0" />
           <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
             Linkmark
           </span>
@@ -105,18 +100,7 @@ export default async function Home() {
 
           {/* Sign in CTA */}
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 32 32"
-              className="mb-4 opacity-20"
-            >
-              <rect width="32" height="32" rx="8" fill="#18181b" />
-              <path
-                d="M9 6h14a1 1 0 0 1 1 1v20.2a0.8 0.8 0 0 1-1.2.7L16 24l-6.8 3.9A0.8 0.8 0 0 1 8 27.2V7a1 1 0 0 1 1-1z"
-                fill="#fafafa"
-              />
-            </svg>
+            <LinkmarkIcon size={48} className="mb-4 opacity-20" />
             <p className="text-lg font-medium text-zinc-900 dark:text-zinc-50">
               Save, organize, and find your bookmarks.
             </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
 
 interface ConfirmModalProps {
   open: boolean;
@@ -27,14 +28,7 @@ export default function ConfirmModal({
     if (open) cancelRef.current?.focus();
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onCancel();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onCancel]);
+  useEscapeKey(open, onCancel);
 
   if (!open) return null;
 
@@ -61,7 +55,7 @@ export default function ConfirmModal({
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="btn-secondary"
           >
             Cancel
           </button>

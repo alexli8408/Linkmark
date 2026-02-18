@@ -47,10 +47,7 @@ export default function NewCollectionPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label
-            htmlFor="name"
-            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor="name" className="label-base">
             Name *
           </label>
           <input
@@ -60,15 +57,12 @@ export default function NewCollectionPage() {
             placeholder="e.g. Frontend Resources"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="input-base"
           />
         </div>
 
         <div>
-          <label
-            htmlFor="description"
-            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
+          <label htmlFor="description" className="label-base">
             Description
           </label>
           <textarea
@@ -77,7 +71,7 @@ export default function NewCollectionPage() {
             placeholder="What's this collection about?"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
+            className="input-base"
           />
         </div>
 
@@ -89,14 +83,14 @@ export default function NewCollectionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="btn-primary disabled:opacity-50"
           >
             {loading ? "Creating..." : "Create Collection"}
           </button>
           <button
             type="button"
             onClick={() => router.back()}
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="btn-secondary"
           >
             Cancel
           </button>

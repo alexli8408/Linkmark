@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
 
 interface BulkTagModalProps {
   open: boolean;
@@ -11,14 +12,7 @@ interface BulkTagModalProps {
 export default function BulkTagModal({ open, onConfirm, onCancel }: BulkTagModalProps) {
   const [input, setInput] = useState("");
 
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onCancel();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onCancel]);
+  useEscapeKey(open, onCancel);
 
   if (!open) return null;
 
@@ -57,18 +51,18 @@ export default function BulkTagModal({ open, onConfirm, onCancel }: BulkTagModal
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="react, javascript, tutorial"
           autoFocus
-          className="mt-3 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+          className="input-base mt-3"
         />
         <div className="mt-4 flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="btn-secondary"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="btn-primary"
           >
             Add Tags
           </button>

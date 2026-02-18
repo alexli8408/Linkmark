@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "./Toast";
 import ConfirmModal from "./ConfirmModal";
 import type { BookmarkTag } from "@/types/bookmark";
+import { getHostname } from "@/lib/utils";
 
 interface BookmarkCardProps {
   id: string;
@@ -42,19 +42,12 @@ export default function BookmarkCard({
   onSelect,
   metadataStatus,
 }: BookmarkCardProps) {
-  const router = useRouter();
   const toast = useToast();
   const [deleting, setDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const displayTitle = title || url;
-  const hostname = (() => {
-    try {
-      return new URL(url).hostname;
-    } catch {
-      return url;
-    }
-  })();
+  const hostname = getHostname(url);
 
   async function confirmDelete() {
     setShowDeleteConfirm(false);
