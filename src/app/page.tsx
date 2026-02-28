@@ -27,7 +27,7 @@ export default async function Home() {
         <form action={handleSignIn}>
           <button
             type="submit"
-            className="btn-primary !rounded-full !px-5 !py-2 !text-sm gap-2"
+            className="btn-primary !px-5 !py-2 !text-sm gap-2"
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
