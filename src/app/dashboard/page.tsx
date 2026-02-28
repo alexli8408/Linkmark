@@ -8,7 +8,7 @@ export default function DashboardPage() {
     <div>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          All Bookmarks
+          Bookmarks
         </h1>
         <Link
           href="/dashboard/new"

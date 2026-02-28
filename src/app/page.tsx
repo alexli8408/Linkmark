@@ -40,7 +40,7 @@ export default async function Home() {
           <nav className="flex flex-col gap-0.5">
             {[
               {
-                label: "All Bookmarks", active: true, icon: (
+                label: "Bookmarks", active: true, icon: (
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                   </svg>
@@ -97,7 +97,7 @@ export default async function Home() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                All Bookmarks
+                Bookmarks
               </h1>
               <span className="w-fit rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
                 + Add Bookmark

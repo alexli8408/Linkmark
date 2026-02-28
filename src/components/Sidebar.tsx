@@ -13,7 +13,7 @@ interface Tag {
 const navItems = [
   {
     href: "/dashboard",
-    label: "All Bookmarks",
+    label: "Bookmarks",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -99,8 +99,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             href={item.href}
             onClick={onNavigate}
             className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 ${isActive(item.href)
-                ? "bg-accent/10 text-accent shadow-sm dark:bg-accent/15 dark:text-accent"
-                : "text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
+              ? "bg-accent/10 text-accent shadow-sm dark:bg-accent/15 dark:text-accent"
+              : "text-zinc-600 hover:bg-zinc-200/60 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
               }`}
           >
             <span className={isActive(item.href) ? "text-accent" : "text-zinc-400 dark:text-zinc-500"}>
@@ -141,8 +141,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 }
                 onClick={onNavigate}
                 className={`flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-all duration-150 ${activeTag === tag.name
-                    ? "bg-accent/10 font-medium text-accent dark:bg-accent/15"
-                    : "text-zinc-500 hover:bg-zinc-200/60 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-300"
+                  ? "bg-accent/10 font-medium text-accent dark:bg-accent/15"
+                  : "text-zinc-500 hover:bg-zinc-200/60 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-300"
                   }`}
               >
                 <span className="flex items-center gap-2">
