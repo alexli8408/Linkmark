@@ -139,27 +139,15 @@ export default async function Home() {
                 Select
               </span>
             </div>
-
-            {/* Sign in CTA */}
+            {/* Branding */}
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div className="mb-4 flex items-center gap-2.5">
                 <LinkmarkIcon size={48} />
-                <span className="text-3xl font-bold text-accent">Linkmark</span>
+                <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Linkmark</span>
               </div>
               <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
                 Save, organize, and find your bookmarks.
               </p>
-              <form action={handleSignIn}>
-                <button
-                  type="submit"
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition-all duration-200 hover:bg-accent-hover hover:shadow-xl hover:shadow-accent/30 active:scale-[0.97]"
-                >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                  Sign in
-                </button>
-              </form>
             </div>
           </div>
         </main>
