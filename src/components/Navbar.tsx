@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { auth, signIn, signOut } from "@/lib/auth";
+import { auth, signIn } from "@/lib/auth";
 import LinkmarkIcon from "./LinkmarkIcon";
+import UserDropdown from "./UserDropdown";
 
 export default async function Navbar() {
   const session = await auth();
@@ -14,32 +15,11 @@ export default async function Navbar() {
 
       <div className="flex items-center gap-4">
         {session?.user ? (
-          <>
-            <span className="hidden text-sm text-zinc-500 sm:inline dark:text-zinc-400">
-              {session.user.name ?? session.user.email}
-            </span>
-            {session.user.image && (
-              <img
-                src={session.user.image}
-                alt="User avatar"
-                className="h-8 w-8 rounded-full ring-2 ring-zinc-100 transition-all hover:ring-accent/40 dark:ring-zinc-800 dark:hover:ring-accent/40"
-              />
-            )}
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button
-                type="submit"
-                aria-label="Sign out"
-                className="btn-secondary !py-1.5 !px-3 !text-xs"
-              >
-                Sign out
-              </button>
-            </form>
-          </>
+          <UserDropdown
+            name={session.user.name ?? null}
+            email={session.user.email ?? null}
+            image={session.user.image ?? null}
+          />
         ) : (
           <form
             action={async () => {
