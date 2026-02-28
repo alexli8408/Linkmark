@@ -42,10 +42,10 @@ export default function UserDropdown({ name, email, image }: UserDropdownProps) 
                     <img
                         src={image}
                         alt="User avatar"
-                        className="h-9 w-9 rounded-full ring-2 ring-zinc-200 transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent/50 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.4)] dark:ring-zinc-700 dark:group-hover:ring-accent/50 dark:group-hover:shadow-[0_0_12px_rgba(129,140,248,0.3)]"
+                        className="h-9 w-9 rounded-full transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent group-hover:shadow-[0_0_14px_rgba(99,102,241,1)] dark:group-hover:ring-accent dark:group-hover:shadow-[0_0_14px_rgba(129,140,248,1)]"
                     />
                 ) : (
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent ring-2 ring-zinc-200 transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent/50 group-hover:shadow-[0_0_12px_rgba(99,102,241,0.4)] dark:ring-zinc-700 dark:group-hover:ring-accent/50">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent group-hover:shadow-[0_0_14px_rgba(99,102,241,1)] dark:group-hover:ring-accent dark:group-hover:shadow-[0_0_14px_rgba(129,140,248,1)]">
                         {(name?.[0] ?? email?.[0] ?? "?").toUpperCase()}
                     </div>
                 )}
@@ -54,8 +54,8 @@ export default function UserDropdown({ name, email, image }: UserDropdownProps) 
             {/* Dropdown */}
             <div
                 className={`absolute right-0 top-full z-50 mt-2 w-64 origin-top-right transition-all duration-200 ${open
-                        ? "scale-100 opacity-100"
-                        : "pointer-events-none scale-95 opacity-0"
+                    ? "scale-100 opacity-100"
+                    : "pointer-events-none scale-95 opacity-0"
                     }`}
             >
                 <div className="overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-xl dark:border-zinc-700/80 dark:bg-zinc-900">
