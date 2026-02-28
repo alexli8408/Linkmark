@@ -73,18 +73,18 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
 
   return (
     <div ref={wrapperRef} className="relative">
-      <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-zinc-300 bg-white px-2 py-1.5 focus-within:border-zinc-500 focus-within:ring-1 focus-within:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900">
+      <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-2 shadow-sm transition-all focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/25 dark:border-zinc-700 dark:bg-zinc-800/50">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="flex items-center gap-1 rounded bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+            className="flex items-center gap-1 rounded-md bg-accent-light px-2 py-0.5 text-xs font-medium text-accent dark:bg-accent/10 dark:text-accent"
           >
             {tag}
             <button
               type="button"
               onClick={() => removeTag(tag)}
               aria-label={`Remove tag ${tag}`}
-              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              className="rounded-full p-0.5 transition-colors hover:bg-accent/20"
             >
               &times;
             </button>
@@ -106,13 +106,13 @@ export default function TagInput({ tags, onChange }: TagInputProps) {
 
       {/* Suggestions dropdown */}
       {showSuggestions && suggestions.length > 0 && (
-        <ul role="listbox" className="absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-md dark:border-zinc-700 dark:bg-zinc-900">
+        <ul role="listbox" className="absolute z-10 mt-1.5 max-h-40 w-full overflow-y-auto rounded-xl border border-zinc-200/80 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           {suggestions.map((s) => (
             <li key={s} role="option">
               <button
                 type="button"
                 onClick={() => addTag(s)}
-                className="w-full px-3 py-1.5 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                className="w-full px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:bg-accent-light hover:text-accent dark:text-zinc-300 dark:hover:bg-accent/10 dark:hover:text-accent"
               >
                 {s}
               </button>

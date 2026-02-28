@@ -145,8 +145,8 @@ export default function CollectionDetailPage() {
     return (
       <div>
         <div className="mb-6">
-          <div className="h-8 w-48 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-          <div className="mt-2 h-4 w-32 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+          <div className="h-8 w-48 rounded-lg skeleton-shimmer" />
+          <div className="mt-2 h-4 w-32 rounded-lg skeleton-shimmer" />
         </div>
         <BookmarkListSkeleton />
       </div>
@@ -167,21 +167,21 @@ export default function CollectionDetailPage() {
               type="text"
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
-              className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-lg font-semibold text-zinc-900 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="input-base !text-lg !font-bold"
             />
             <textarea
               rows={2}
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               placeholder="Description"
-              className="rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+              className="input-base"
             />
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
                 checked={editIsPublic}
                 onChange={(e) => setEditIsPublic(e.target.checked)}
-                className="rounded border-zinc-300"
+                className="rounded border-zinc-300 accent-accent"
               />
               <span className="text-zinc-700 dark:text-zinc-300">
                 Make this collection public
@@ -190,13 +190,13 @@ export default function CollectionDetailPage() {
             <div className="flex gap-2">
               <button
                 onClick={handleSaveEdit}
-                className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                className="btn-primary"
               >
                 Save
               </button>
               <button
                 onClick={() => setEditing(false)}
-                className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                className="btn-secondary"
               >
                 Cancel
               </button>
@@ -205,7 +205,7 @@ export default function CollectionDetailPage() {
         ) : (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+              <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
                 {collection.name}
               </h1>
               {collection.description && (
@@ -213,17 +213,19 @@ export default function CollectionDetailPage() {
                   {collection.description}
                 </p>
               )}
-              <p className="mt-1 text-xs text-zinc-400">
-                {collection.bookmarks.length} bookmark
-                {collection.bookmarks.length !== 1 ? "s" : ""}
+              <div className="mt-1.5 flex items-center gap-2">
+                <span className="text-xs text-zinc-400">
+                  {collection.bookmarks.length} bookmark
+                  {collection.bookmarks.length !== 1 ? "s" : ""}
+                </span>
                 {collection.isPublic && (
-                  <span className="ml-2 inline-block rounded bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900 dark:text-green-300">
+                  <span className="rounded-md bg-emerald-50 px-1.5 py-0.5 text-xs font-medium text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
                     Public
                   </span>
                 )}
-              </p>
+              </div>
               {collection.isPublic && (
-                <div className="mt-1 flex items-center gap-2">
+                <div className="mt-1.5 flex items-center gap-2">
                   <span className="truncate text-xs text-zinc-400">
                     {window.location.origin}/shared/collection/{collection.id}
                   </span>
@@ -234,7 +236,7 @@ export default function CollectionDetailPage() {
                       );
                       toast.success("Link copied");
                     }}
-                    className="shrink-0 text-xs text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                    className="shrink-0 text-xs font-medium text-accent transition-colors hover:text-accent-hover"
                   >
                     Copy
                   </button>
@@ -244,15 +246,18 @@ export default function CollectionDetailPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setEditing(true)}
-                className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                className="btn-secondary"
               >
                 Edit
               </button>
               <button
                 onClick={openAddPicker}
-                className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                className="btn-primary gap-1.5"
               >
-                + Add Bookmark
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add Bookmark
               </button>
             </div>
           </div>
@@ -261,14 +266,14 @@ export default function CollectionDetailPage() {
 
       {/* Add bookmark picker */}
       {showAddPicker && (
-        <div className="mb-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-          <div className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+        <div className="mb-4 rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
               Select a bookmark to add
             </h3>
             <button
               onClick={() => setShowAddPicker(false)}
-              className="text-sm text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              className="text-sm text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-200"
             >
               Cancel
             </button>
@@ -278,12 +283,12 @@ export default function CollectionDetailPage() {
               All your bookmarks are already in this collection.
             </p>
           ) : (
-            <div className="flex max-h-48 flex-col gap-1 overflow-y-auto">
+            <div className="flex max-h-48 flex-col gap-0.5 overflow-y-auto">
               {allBookmarks.map((b) => (
                 <button
                   key={b.id}
                   onClick={() => handleAddBookmark(b.id)}
-                  className="rounded px-3 py-1.5 text-left text-sm text-zinc-700 hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  className="rounded-lg px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:bg-accent-light hover:text-accent dark:text-zinc-300 dark:hover:bg-accent/10 dark:hover:text-accent"
                 >
                   {b.title || b.url}
                 </button>
@@ -295,13 +300,18 @@ export default function CollectionDetailPage() {
 
       {/* Bookmarks in collection */}
       {orderedBookmarks.length === 0 ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          This collection is empty. Add some bookmarks to it.
-        </p>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <svg className="mb-4 h-12 w-12 text-zinc-300 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            This collection is empty. Add some bookmarks to it.
+          </p>
+        </div>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={orderedBookmarks.map((b) => b.id)} strategy={verticalListSortingStrategy}>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
               {orderedBookmarks.map((bookmark) => (
                 <SortableBookmarkItem
                   key={bookmark.id}

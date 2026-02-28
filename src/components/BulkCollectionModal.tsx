@@ -40,13 +40,13 @@ export default function BulkCollectionModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-[fadeIn_150ms_ease-out]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-[fadeIn_150ms_ease-out]"
       onClick={onCancel}
     >
       <div
         role="dialog"
         aria-modal="true"
-        className="w-full max-w-sm rounded-lg border border-zinc-200 bg-white p-6 shadow-xl animate-[scaleIn_150ms_ease-out] dark:border-zinc-800 dark:bg-zinc-900"
+        className="w-full max-w-sm rounded-xl border border-zinc-200/80 bg-white p-6 shadow-2xl animate-[scaleIn_150ms_ease-out] dark:border-zinc-700/80 dark:bg-zinc-900"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
@@ -55,17 +55,17 @@ export default function BulkCollectionModal({
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           Choose a collection for the selected bookmarks.
         </p>
-        <div className="mt-3 flex max-h-48 flex-col gap-1 overflow-y-auto">
+        <div className="mt-3 flex max-h-48 flex-col gap-0.5 overflow-y-auto">
           {loading ? (
-            <p className="py-2 text-sm text-zinc-400">Loading...</p>
+            <p className="py-3 text-center text-sm text-zinc-400">Loading...</p>
           ) : collections.length === 0 ? (
-            <p className="py-2 text-sm text-zinc-400">No collections yet.</p>
+            <p className="py-3 text-center text-sm text-zinc-400">No collections yet.</p>
           ) : (
             collections.map((c) => (
               <button
                 key={c.id}
                 onClick={() => onConfirm(c.id)}
-                className="rounded px-3 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                className="rounded-lg px-3 py-2 text-left text-sm text-zinc-700 transition-colors hover:bg-accent-light hover:text-accent dark:text-zinc-300 dark:hover:bg-accent/10 dark:hover:text-accent"
               >
                 {c.name}
               </button>

@@ -24,14 +24,14 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-[fadeIn_150ms_ease-out]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-[fadeIn_150ms_ease-out]"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="shortcuts-title"
-        className="relative w-full max-w-sm rounded-lg border border-zinc-200 bg-white p-6 shadow-xl animate-[scaleIn_150ms_ease-out] dark:border-zinc-800 dark:bg-zinc-900"
+        className="relative w-full max-w-sm rounded-xl border border-zinc-200/80 bg-white p-6 shadow-2xl animate-[scaleIn_150ms_ease-out] dark:border-zinc-700/80 dark:bg-zinc-900"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="shortcuts-title" className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
@@ -41,7 +41,7 @@ export default function KeyboardShortcutsModal({ open, onClose }: KeyboardShortc
           {shortcuts.map((s) => (
             <div key={s.keys} className="flex items-center justify-between">
               <span className="text-sm text-zinc-600 dark:text-zinc-400">{s.description}</span>
-              <kbd className="rounded border border-zinc-300 bg-zinc-100 px-2 py-0.5 text-xs font-mono text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+              <kbd className="rounded-lg border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-xs font-mono font-medium text-zinc-600 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                 {s.keys}
               </kbd>
             </div>

@@ -22,35 +22,35 @@ export default function BulkActionToolbar({
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 dark:border-zinc-800 dark:bg-zinc-900">
-        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+      <div className="sticky top-0 z-10 flex items-center gap-3 rounded-xl border border-zinc-200/80 bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-900/90">
+        <span className="rounded-lg bg-accent/10 px-2.5 py-1 text-sm font-semibold text-accent">
           {selectedCount} selected
         </span>
         <div className="ml-auto flex gap-2">
           <button
             onClick={onAddTag}
             aria-label="Add tags to selected bookmarks"
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className="btn-secondary !py-1.5 !px-3 !text-xs"
           >
             Add Tags
           </button>
           <button
             onClick={onMoveToCollection}
             aria-label="Add selected bookmarks to collection"
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className="btn-secondary !py-1.5 !px-3 !text-xs"
           >
             Add to Collection
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}
             aria-label="Delete selected bookmarks"
-            className="rounded-md bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+            className="rounded-lg bg-red-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-all hover:bg-red-600 active:scale-[0.97]"
           >
             Delete
           </button>
           <button
             onClick={onDeselectAll}
-            className="rounded-md px-2 py-1.5 text-xs text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            className="rounded-lg px-2 py-1.5 text-xs text-zinc-400 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             Cancel
           </button>

@@ -6,23 +6,23 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className="flex h-14 items-center justify-between bg-white px-6 dark:bg-zinc-950">
-      <Link href="/dashboard" className="flex items-center gap-2 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-        <LinkmarkIcon size={24} className="shrink-0" />
+    <nav className="flex h-14 items-center justify-between bg-white/80 px-6 backdrop-blur-md dark:bg-zinc-950/80">
+      <Link href="/dashboard" className="flex items-center gap-2.5 text-lg font-semibold text-zinc-900 transition-opacity hover:opacity-80 dark:text-zinc-50">
+        <LinkmarkIcon size={26} className="shrink-0" />
         Linkmark
       </Link>
 
       <div className="flex items-center gap-4">
         {session?.user ? (
           <>
-            <span className="hidden text-sm text-zinc-600 sm:inline dark:text-zinc-400">
+            <span className="hidden text-sm text-zinc-500 sm:inline dark:text-zinc-400">
               {session.user.name ?? session.user.email}
             </span>
             {session.user.image && (
               <img
                 src={session.user.image}
                 alt="User avatar"
-                className="h-8 w-8 rounded-full"
+                className="h-8 w-8 rounded-full ring-2 ring-zinc-100 transition-all hover:ring-accent/40 dark:ring-zinc-800 dark:hover:ring-accent/40"
               />
             )}
             <form
@@ -34,7 +34,7 @@ export default async function Navbar() {
               <button
                 type="submit"
                 aria-label="Sign out"
-                className="rounded-md bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                className="btn-secondary !py-1.5 !px-3 !text-xs"
               >
                 Sign out
               </button>
@@ -49,7 +49,7 @@ export default async function Navbar() {
           >
             <button
               type="submit"
-              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+              className="btn-primary !py-1.5 !px-3 !text-xs"
             >
               Sign in
             </button>

@@ -36,7 +36,7 @@ export default function SortableBookmarkItem({
       <button
         {...attributes}
         {...listeners}
-        className="flex w-8 shrink-0 cursor-grab items-center justify-center text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:hover:text-zinc-300"
+        className="flex w-8 shrink-0 cursor-grab items-center justify-center text-zinc-300 transition-colors hover:text-zinc-500 active:cursor-grabbing dark:text-zinc-600 dark:hover:text-zinc-400"
         aria-label="Drag to reorder"
       >
         <svg className="h-4 w-4" viewBox="0 0 16 16" fill="currentColor">
@@ -54,7 +54,7 @@ export default function SortableBookmarkItem({
       <button
         onClick={() => onRemove(bookmark.id)}
         aria-label="Remove from collection"
-        className="absolute right-12 top-4 rounded p-1 text-zinc-400 opacity-100 hover:bg-red-50 hover:text-red-600 md:opacity-0 md:group-hover/sort:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
+        className="absolute right-12 top-4 rounded-lg p-1.5 text-zinc-400 opacity-100 transition-all hover:bg-red-50 hover:text-red-500 md:opacity-0 md:group-hover/sort:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
       >
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

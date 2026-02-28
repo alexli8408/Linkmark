@@ -162,20 +162,25 @@ export default function BookmarkList() {
   return (
     <div>
       {/* Search bar */}
-      <form onSubmit={handleSearch} className="mb-4">
+      <form onSubmit={handleSearch} className="mb-5">
         <div className="flex gap-2">
-          <input
-            ref={searchRef}
-            type="text"
-            placeholder="Search bookmarks..."
-            aria-label="Search bookmarks"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500"
-          />
+          <div className="relative flex-1">
+            <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              ref={searchRef}
+              type="text"
+              placeholder="Search bookmarks..."
+              aria-label="Search bookmarks"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-xl border border-zinc-200 bg-white py-2.5 pl-10 pr-3 text-sm text-zinc-900 shadow-sm placeholder-zinc-400 transition-all focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-50 dark:placeholder-zinc-500"
+            />
+          </div>
           <button
             type="submit"
-            className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            className="btn-primary"
           >
             Search
           </button>
@@ -186,7 +191,7 @@ export default function BookmarkList() {
                 setSearch("");
                 updateParams({ q: null });
               }}
-              className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              className="btn-secondary"
             >
               Clear
             </button>
@@ -200,12 +205,12 @@ export default function BookmarkList() {
           <span className="text-xs text-zinc-500 dark:text-zinc-400">
             Filtered by tag:
           </span>
-          <span className="flex items-center gap-1 rounded bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+          <span className="flex items-center gap-1.5 rounded-lg bg-accent-light px-2.5 py-1 text-xs font-medium text-accent dark:bg-accent/10">
             {tagFilter}
             <button
               onClick={() => updateParams({ tag: null })}
               aria-label="Clear tag filter"
-              className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              className="rounded-full p-0.5 transition-colors hover:bg-accent/20"
             >
               &times;
             </button>
@@ -214,22 +219,23 @@ export default function BookmarkList() {
       )}
 
       {/* Sort controls + Select toggle */}
-      <div className="mb-4 flex items-center gap-2">
-        <span className="text-xs text-zinc-500 dark:text-zinc-400">Sort by:</span>
-        {(["newest", "oldest", "title"] as const).map((s) => (
-          <button
-            key={s}
-            onClick={() => updateParams({ sort: s })}
-            aria-pressed={sort === s}
-            className={`rounded-md px-2 py-1 text-xs font-medium ${
-              sort === s
-                ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            }`}
-          >
-            {s.charAt(0).toUpperCase() + s.slice(1)}
-          </button>
-        ))}
+      <div className="mb-5 flex items-center gap-2">
+        <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sort by:</span>
+        <div className="flex gap-1 rounded-lg bg-zinc-100 p-0.5 dark:bg-zinc-800">
+          {(["newest", "oldest", "title"] as const).map((s) => (
+            <button
+              key={s}
+              onClick={() => updateParams({ sort: s })}
+              aria-pressed={sort === s}
+              className={`rounded-md px-2.5 py-1 text-xs font-medium transition-all duration-150 ${sort === s
+                  ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-50"
+                  : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                }`}
+            >
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
         <div className="ml-auto flex gap-2">
           {selectMode && bookmarks.length > 0 && (
             <button
@@ -240,7 +246,7 @@ export default function BookmarkList() {
                   setSelectedIds(new Set(bookmarks.map((b) => b.id)));
                 }
               }}
-              className="rounded-md px-2 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              className="rounded-lg px-2.5 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             >
               {selectedIds.size === bookmarks.length ? "Deselect All" : "Select All"}
             </button>
@@ -250,11 +256,10 @@ export default function BookmarkList() {
               if (selectMode) exitSelectMode();
               else setSelectMode(true);
             }}
-            className={`rounded-md px-2 py-1 text-xs font-medium ${
-              selectMode
-                ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            }`}
+            className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-150 ${selectMode
+                ? "bg-accent text-white shadow-sm"
+                : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              }`}
           >
             {selectMode ? "Cancel" : "Select"}
           </button>
@@ -278,13 +283,18 @@ export default function BookmarkList() {
       {loading ? (
         <BookmarkListSkeleton />
       ) : bookmarks.length === 0 ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          {searchQuery || tagFilter
-            ? "No bookmarks match your search."
-            : "No bookmarks yet. Add your first bookmark to get started."}
-        </p>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <svg className="mb-4 h-12 w-12 text-zinc-300 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+          </svg>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {searchQuery || tagFilter
+              ? "No bookmarks match your search."
+              : "No bookmarks yet. Add your first bookmark to get started."}
+          </p>
+        </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           {bookmarks.map((bookmark) => (
             <BookmarkCard
               key={bookmark.id}

@@ -27,11 +27,11 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
         <div className="grid gap-4 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-24 animate-pulse rounded-lg border border-zinc-200 bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900" />
+            <div key={i} className="h-24 rounded-xl border border-zinc-200/80 skeleton-shimmer dark:border-zinc-800/80" />
           ))}
         </div>
       </div>
@@ -40,8 +40,8 @@ export default function AnalyticsPage() {
 
   if (!data) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
           Unable to load analytics data. Try refreshing the page.
         </p>
@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-3">
@@ -65,7 +65,7 @@ export default function AnalyticsPage() {
 
       {/* Bookmarks over time chart */}
       {data.bookmarksOverTime.length > 0 && (
-        <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
           <h2 className="mb-4 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
             Bookmarks Added (Last 30 Days)
           </h2>
@@ -76,11 +76,11 @@ export default function AnalyticsPage() {
               const label = `${date.getMonth() + 1}/${date.getDate()}`;
               return (
                 <div key={d.date} className="group flex flex-1 flex-col items-center gap-1">
-                  <span className="text-[10px] text-zinc-400 opacity-0 group-hover:opacity-100">
+                  <span className="text-[10px] font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
                     {d.count}
                   </span>
                   <div
-                    className="w-full min-w-[4px] rounded-t bg-zinc-600 transition-colors hover:bg-zinc-400 dark:bg-zinc-500 dark:hover:bg-zinc-300"
+                    className="w-full min-w-[4px] rounded-t-md bg-gradient-to-t from-indigo-500 to-violet-400 transition-all duration-200 hover:from-indigo-400 hover:to-violet-300 dark:from-indigo-600 dark:to-violet-500"
                     style={{ height: Math.max(height, 2) }}
                   />
                   <span className="text-[9px] text-zinc-400">{label}</span>
@@ -94,23 +94,23 @@ export default function AnalyticsPage() {
       <div className="grid gap-4 md:grid-cols-2">
         {/* Top tags */}
         {data.topTags.length > 0 && (
-          <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
             <h2 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
               Top Tags
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {data.topTags.map((tag) => (
-                <div key={tag.name} className="flex items-center gap-2">
-                  <span className="w-20 truncate text-xs text-zinc-600 dark:text-zinc-400">
+                <div key={tag.name} className="flex items-center gap-2.5">
+                  <span className="w-20 truncate text-xs font-medium text-zinc-600 dark:text-zinc-400">
                     {tag.name}
                   </span>
                   <div className="flex-1">
                     <div
-                      className="h-4 rounded bg-zinc-200 dark:bg-zinc-700"
+                      className="h-4 rounded-md bg-gradient-to-r from-indigo-400/30 to-violet-400/30 dark:from-indigo-500/20 dark:to-violet-500/20"
                       style={{ width: `${(tag.count / maxTagCount) * 100}%` }}
                     />
                   </div>
-                  <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                  <span className="text-xs font-semibold text-accent">
                     {tag.count}
                   </span>
                 </div>
@@ -121,18 +121,18 @@ export default function AnalyticsPage() {
 
         {/* Recent bookmarks */}
         {data.recentBookmarks.length > 0 && (
-          <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
             <h2 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
               Recent Activity
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {data.recentBookmarks.map((b) => (
                 <div key={b.id} className="flex items-center justify-between gap-2">
                   <a
                     href={b.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="truncate text-sm text-zinc-700 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+                    className="truncate text-sm text-zinc-700 transition-colors hover:text-accent dark:text-zinc-300 dark:hover:text-accent"
                   >
                     {b.title || b.url}
                   </a>
@@ -151,9 +151,9 @@ export default function AnalyticsPage() {
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
       <p className="text-sm text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{value}</p>
+      <p className="mt-1 text-3xl font-bold text-accent">{value}</p>
     </div>
   );
 }
