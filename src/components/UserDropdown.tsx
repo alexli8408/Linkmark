@@ -42,10 +42,10 @@ export default function UserDropdown({ name, email, image }: UserDropdownProps) 
                     <img
                         src={image}
                         alt="User avatar"
-                        className="h-9 w-9 rounded-full transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent group-hover:shadow-[0_0_14px_rgba(99,102,241,1)] dark:group-hover:ring-accent dark:group-hover:shadow-[0_0_14px_rgba(129,140,248,1)]"
+                        className="h-9 w-9 rounded-full transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent dark:group-hover:ring-accent"
                     />
                 ) : (
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent group-hover:shadow-[0_0_14px_rgba(99,102,241,1)] dark:group-hover:ring-accent dark:group-hover:shadow-[0_0_14px_rgba(129,140,248,1)]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-sm font-semibold text-accent transition-all duration-200 group-hover:ring-[3px] group-hover:ring-accent dark:group-hover:ring-accent">
                         {(name?.[0] ?? email?.[0] ?? "?").toUpperCase()}
                     </div>
                 )}
