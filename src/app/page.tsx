@@ -144,8 +144,8 @@ export default async function Home() {
             </div>
             {/* Branding */}
             <div className="flex flex-col items-center justify-center py-24 text-center">
-              <div className="mb-4 flex items-center gap-2.5">
-                <LinkmarkIcon size={48} />
+              <div className="mb-4 flex items-center gap-2">
+                <LinkmarkIcon size={28} />
                 <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Linkmark</span>
               </div>
               <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
