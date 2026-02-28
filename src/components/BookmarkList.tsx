@@ -228,8 +228,8 @@ export default function BookmarkList() {
               onClick={() => updateParams({ sort: s })}
               aria-pressed={sort === s}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition-all duration-150 ${sort === s
-                  ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-50"
-                  : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
+                ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-50"
+                : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
                 }`}
             >
               {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -257,8 +257,8 @@ export default function BookmarkList() {
               else setSelectMode(true);
             }}
             className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all duration-150 ${selectMode
-                ? "bg-accent text-white shadow-sm"
-                : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              ? "bg-accent text-white shadow-sm"
+              : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
               }`}
           >
             {selectMode ? "Cancel" : "Select"}
@@ -290,7 +290,7 @@ export default function BookmarkList() {
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             {searchQuery || tagFilter
               ? "No bookmarks match your search."
-              : "No bookmarks yet. Add your first bookmark to get started."}
+              : "No bookmarks yet."}
           </p>
         </div>
       ) : (
