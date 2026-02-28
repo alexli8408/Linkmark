@@ -8,7 +8,7 @@ export default async function Navbar() {
 
   return (
     <nav className="flex h-14 items-center justify-between bg-white/80 px-6 backdrop-blur-md dark:bg-zinc-950/80">
-      <Link href="/dashboard" className="flex items-center gap-2.5 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+      <Link href="/dashboard" className="flex items-center gap-2.5 text-lg font-semibold text-accent">
         <LinkmarkIcon size={26} className="shrink-0" />
         Linkmark
       </Link>
