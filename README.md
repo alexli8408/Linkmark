@@ -75,6 +75,6 @@ The broken link checker is designed to run on AWS Lambda.
 - **Framework:** Next.js (App Router)
 - **Database:** PostgreSQL & Prisma ORM
 - **Auth:** NextAuth (Auth.js)
-- **Styling:** Tailwind CSS
+- **Styling:** Tailwind CSS v4
 - **Cloud:** AWS (S3, Lambda)
 - **UI:** React, dnd-kit (Drag and drop)
