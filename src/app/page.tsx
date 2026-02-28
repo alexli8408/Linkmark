@@ -148,7 +148,7 @@ export default async function Home() {
                 <LinkmarkIcon size={28} />
                 <span className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">Linkmark</span>
               </div>
-              <p className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+              <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
                 Save, organize, and find your bookmarks.
               </p>
             </div>
