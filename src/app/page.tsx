@@ -17,22 +17,22 @@ export default async function Home() {
   return (
     <div className="flex h-screen flex-col bg-white dark:bg-zinc-950">
       {/* Navbar */}
-      <nav className="flex h-16 items-center justify-between border-b border-zinc-200/60 bg-white/80 px-6 backdrop-blur-md dark:border-zinc-800/60 dark:bg-zinc-950/80">
+      <nav className="flex h-[60px] items-center justify-between border-b border-zinc-200/60 bg-white/80 px-8 backdrop-blur-md dark:border-zinc-800/60 dark:bg-zinc-950/80">
         <div className="flex items-center gap-2.5">
-          <LinkmarkIcon size={26} className="shrink-0" />
-          <span className="text-lg font-semibold text-accent">
+          <LinkmarkIcon size={28} className="shrink-0" />
+          <span className="text-xl font-semibold text-accent">
             Linkmark
           </span>
         </div>
         <form action={handleSignIn}>
           <button
             type="submit"
-            className="btn-primary !py-1.5 !px-3 !text-xs gap-1.5"
+            className="btn-primary !rounded-full !px-5 !py-2 !text-sm gap-2"
           >
-            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
             </svg>
-            Sign in
+            Sign In
           </button>
         </form>
       </nav>
@@ -157,7 +157,7 @@ export default async function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="flex items-center justify-between border-t border-zinc-200/60 bg-white/80 px-6 py-3.5 dark:border-zinc-800/60 dark:bg-zinc-950/80">
+      <footer className="flex items-center justify-between border-t border-zinc-200/60 bg-white/80 px-8 py-4 dark:border-zinc-800/60 dark:bg-zinc-950/80">
         <span className="text-sm text-zinc-400 dark:text-zinc-500">Linkmark</span>
         <span className="text-sm text-zinc-400 dark:text-zinc-500">Powered by AWS &amp; PostgreSQL</span>
       </footer>
