@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <div className="flex h-screen flex-col bg-white dark:bg-zinc-950">
       {/* Navbar */}
-      <nav className="flex h-14 items-center justify-between border-b border-zinc-200/60 bg-white/80 px-6 backdrop-blur-md dark:border-zinc-800/60 dark:bg-zinc-950/80">
+      <nav className="flex h-16 items-center justify-between border-b border-zinc-200/60 bg-white/80 px-6 backdrop-blur-md dark:border-zinc-800/60 dark:bg-zinc-950/80">
         <div className="flex items-center gap-2.5">
           <LinkmarkIcon size={26} className="shrink-0" />
           <span className="text-lg font-semibold text-accent">
@@ -157,9 +157,9 @@ export default async function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="flex items-center justify-between border-t border-zinc-200/60 bg-white/80 px-6 py-2 dark:border-zinc-800/60 dark:bg-zinc-950/80">
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">Linkmark</span>
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">Powered by AWS &amp; PostgreSQL</span>
+      <footer className="flex items-center justify-between border-t border-zinc-200/60 bg-white/80 px-6 py-3.5 dark:border-zinc-800/60 dark:bg-zinc-950/80">
+        <span className="text-sm text-zinc-400 dark:text-zinc-500">Linkmark</span>
+        <span className="text-sm text-zinc-400 dark:text-zinc-500">Powered by AWS &amp; PostgreSQL</span>
       </footer>
     </div>
   );
