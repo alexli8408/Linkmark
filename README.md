@@ -12,12 +12,19 @@ Linkmark is a full-stack, comprehensive bookmark manager built with [Next.js](ht
 - **PostgreSQL Database:** Powered by [Prisma](https://www.prisma.io/) ORM and a PostgreSQL database to store users, bookmarks, tags, and collections.
 - **AWS S3 Integration:** Uses AWS S3 for storing assets like favicons or preview images.
 
-## Project Structure
+## Architecture & Deep Dive
+
+Linkmark is a complex distributed system orchestrating a Next.js App Router monolith, a PostgreSQL database, an AWS Lambda worker, and a Manifest V3 Chrome Extension.
+
+> [!IMPORTANT]
+> For an exhaustive, highly-detailed breakdown of the system architecture, database indexing, React optimistic UI patterns, and security paradigms, please read the [Ultimate Engineering Devlog](./devlog.md).
+
+### Project Structure Highlights
 
 - `src/`: Core Next.js application, including the app router (`app/`), React components (`components/`), hooks, and utility functions (`lib/`).
-- `prisma/`: Database schema (`schema.prisma`) and migrations.
-- `extension/`: Chrome extension source code with manifest v3.
-- `lambda/`: AWS Lambda Node.js script (`index.mjs`) to check for broken URLs in the database.
+- `prisma/`: Database schema (`schema.prisma`) and sequence migrations. Features strict Foreign Key indexing and explicit junction tables for Drag-and-Drop functionality.
+- `extension/`: Chrome extension source code with manifest v3. Implements stateless Bearer token cryptography for secure saving.
+- `lambda/`: AWS Lambda Node.js script (`index.mjs`) to check for broken URLs in the database efficiently via HTTP HEAD requests, bypassing Next.js edge limits.
 
 ## Getting Started
 
