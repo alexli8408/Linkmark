@@ -129,14 +129,14 @@ The schema intertwines generic OAuth requirements with highly bespoke domain log
 ```mermaid
 erDiagram
     %% Auth Models (NextAuth mandated)
-    USER ||--o{ ACCOUNT : "holds (OAuth providers)"
+    USER ||--o{ ACCOUNT : holds
     USER ||--o{ SESSION : establishes
 
     %% Domain Models
     USER ||--o{ BOOKMARK : creates
     USER ||--o{ COLLECTION : owns
     USER ||--o{ TAG : defines
-    USER ||--o{ API_KEY : "generates (for Extension)"
+    USER ||--o{ API_KEY : generates
 
     %% Core Tables
     USER {
@@ -179,7 +179,7 @@ erDiagram
     BOOKMARK ||--o{ BOOKMARK_TAG : has
     TAG ||--o{ BOOKMARK_TAG : belongs_to
     COLLECTION ||--o{ COLLECTION_BOOKMARK : contains
-    BOOKMARK ||--o{ COLLECTION_BOOKMARK : "placed_in"
+    BOOKMARK ||--o{ COLLECTION_BOOKMARK : placed_in
 ```
 
 **Architectural Nuance: Explicit Junction Tables**
