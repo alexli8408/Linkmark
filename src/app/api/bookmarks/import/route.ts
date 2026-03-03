@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { parseBookmarkHtml } from "@/lib/parseBookmarkHtml";
+import { fetchMetadata } from "@/lib/fetchMetadata";
+import { invokeMetadataFetcher } from "@/lib/invokeLambda";
 
 interface ImportItem {
   url: string;
@@ -71,6 +73,7 @@ export async function POST(req: NextRequest) {
 
   let imported = 0;
   let skipped = 0;
+  const createdBookmarks: { id: string; url: string; title: string | null }[] = [];
 
   for (const item of items) {
     if (!item.url) {
@@ -87,42 +90,72 @@ export async function POST(req: NextRequest) {
       continue;
     }
 
-    // Create bookmark without fetching metadata (keeps import fast)
     const tagConnections = item.tags?.length
       ? {
-          create: await Promise.all(
-            item.tags.map(async (name) => {
-              const tag = await prisma.tag.upsert({
-                where: {
-                  name_userId: {
-                    name: name.toLowerCase(),
-                    userId: session.user!.id!,
-                  },
-                },
-                update: {},
-                create: {
+        create: await Promise.all(
+          item.tags.map(async (name) => {
+            const tag = await prisma.tag.upsert({
+              where: {
+                name_userId: {
                   name: name.toLowerCase(),
                   userId: session.user!.id!,
                 },
-              });
-              return { tagId: tag.id };
-            })
-          ),
-        }
+              },
+              update: {},
+              create: {
+                name: name.toLowerCase(),
+                userId: session.user!.id!,
+              },
+            });
+            return { tagId: tag.id };
+          })
+        ),
+      }
       : undefined;
 
-    await prisma.bookmark.create({
+    const bookmark = await prisma.bookmark.create({
       data: {
         url: item.url,
         title: item.title ?? null,
         description: item.description ?? null,
         note: item.note ?? null,
+        metadataStatus: "pending",
         userId: session.user.id,
         tags: tagConnections,
         ...(item.createdAt && { createdAt: new Date(item.createdAt) }),
       },
     });
+    createdBookmarks.push({ id: bookmark.id, url: item.url, title: item.title ?? null });
     imported++;
+  }
+
+  // Fire-and-forget: fetch metadata for all imported bookmarks in the background
+  if (createdBookmarks.length > 0) {
+    (async () => {
+      for (const bm of createdBookmarks) {
+        try {
+          const lambdaInvoked = await invokeMetadataFetcher(bm.id, bm.url).catch(() => false);
+          if (!lambdaInvoked) {
+            const metadata = await fetchMetadata(bm.url);
+            await prisma.bookmark.update({
+              where: { id: bm.id },
+              data: {
+                title: bm.title ?? metadata.title,
+                description: metadata.description,
+                favicon: metadata.favicon,
+                previewImage: metadata.previewImage,
+                metadataStatus: "complete",
+              },
+            });
+          }
+        } catch {
+          await prisma.bookmark.update({
+            where: { id: bm.id },
+            data: { metadataStatus: "failed" },
+          }).catch(() => { });
+        }
+      }
+    })();
   }
 
   return NextResponse.json({
