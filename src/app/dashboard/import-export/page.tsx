@@ -6,6 +6,7 @@ import { useToast } from "@/components/Toast";
 export default function ImportExportPage() {
   const toast = useToast();
   const [importing, setImporting] = useState(false);
+  const [hasFile, setHasFile] = useState(false);
   const [result, setResult] = useState<{
     imported: number;
     skipped: number;
@@ -44,6 +45,7 @@ export default function ImportExportPage() {
       setResult(data);
       toast.success(`Imported ${data.imported} bookmarks`);
       form.reset();
+      setHasFile(false);
     } catch {
       toast.error("Import failed");
     } finally {
@@ -95,11 +97,12 @@ export default function ImportExportPage() {
             type="file"
             name="file"
             accept=".json,.csv,.html,.htm"
+            onChange={(e) => setHasFile(!!e.target.files?.length)}
             className="text-sm text-zinc-600 file:mr-3 file:rounded-lg file:border-0 file:bg-zinc-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-zinc-700 file:transition-colors hover:file:bg-zinc-200 dark:text-zinc-400 dark:file:bg-zinc-800 dark:file:text-zinc-300 dark:hover:file:bg-zinc-700"
           />
           <button
             type="submit"
-            disabled={importing}
+            disabled={importing || !hasFile}
             className="btn-primary w-fit disabled:opacity-50"
           >
             {importing ? "Importing..." : "Import"}
