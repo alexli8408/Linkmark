@@ -8,7 +8,7 @@ export default async function Navbar() {
 
   return (
     <nav className="flex h-[66px] items-center justify-between bg-white/80 px-8 backdrop-blur-md dark:bg-zinc-950/80">
-      <Link href="/dashboard" className="flex items-center gap-2.5 text-xl font-semibold text-accent">
+      <Link href="/" className="flex items-center gap-2.5 text-xl font-semibold text-accent">
         <LinkmarkIcon size={28} className="shrink-0" />
         Linkmark
       </Link>
@@ -24,7 +24,7 @@ export default async function Navbar() {
           <form
             action={async () => {
               "use server";
-              await signIn("github", { redirectTo: "/dashboard" });
+              await signIn("github", { redirectTo: "/" });
             }}
           >
             <button

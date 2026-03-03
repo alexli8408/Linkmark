@@ -62,7 +62,7 @@ export default function CollectionsPage() {
           Collections
         </h1>
         <Link
-          href="/dashboard/collections/new"
+          href="/collections/new"
           className="btn-primary w-fit gap-1.5"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@ export default function CollectionsPage() {
               className="group relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900 dark:hover:border-zinc-700"
             >
               <Link
-                href={`/dashboard/collections/${collection.id}`}
+                href={`/collections/${collection.id}`}
                 className="block"
               >
                 <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">

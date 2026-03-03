@@ -65,8 +65,8 @@ export default function BookmarkCard({
   return (
     <>
       <div className={`group overflow-hidden rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md ${selected
-          ? "border-accent/50 bg-accent-light ring-1 ring-accent/20 dark:border-accent/40 dark:bg-accent/5"
-          : "border-zinc-200/80 bg-white hover:border-zinc-300 dark:border-zinc-800/80 dark:bg-zinc-900 dark:hover:border-zinc-700"
+        ? "border-accent/50 bg-accent-light ring-1 ring-accent/20 dark:border-accent/40 dark:bg-accent/5"
+        : "border-zinc-200/80 bg-white hover:border-zinc-300 dark:border-zinc-800/80 dark:bg-zinc-900 dark:hover:border-zinc-700"
         }`}>
         {selectable && (
           <div className="flex items-center px-4 pt-3">
@@ -160,7 +160,7 @@ export default function BookmarkCard({
           {/* Actions — always visible on mobile, hover on desktop */}
           <div className="flex shrink-0 gap-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
             <Link
-              href={`/dashboard/edit/${id}`}
+              href={`/edit/${id}`}
               aria-label="Edit bookmark"
               className="rounded-lg p-1.5 text-zinc-400 transition-all hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
             >

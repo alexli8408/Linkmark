@@ -1,17 +1,45 @@
 import { auth, signIn } from "@/lib/auth";
-import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import Link from "next/link";
 import LinkmarkIcon from "@/components/LinkmarkIcon";
+import Navbar from "@/components/Navbar";
+import DashboardShell from "@/components/DashboardShell";
+import BookmarkList from "@/components/BookmarkList";
+import { BookmarkListSkeleton } from "@/components/Skeleton";
 
 export default async function Home() {
   const session = await auth();
 
   if (session?.user) {
-    redirect("/dashboard");
+    return (
+      <DashboardShell navbar={<Navbar />}>
+        <div>
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+              Bookmarks
+            </h1>
+            <Link
+              href="/new"
+              className="btn-primary w-fit gap-1.5"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Bookmark
+            </Link>
+          </div>
+
+          <Suspense fallback={<BookmarkListSkeleton />}>
+            <BookmarkList />
+          </Suspense>
+        </div>
+      </DashboardShell>
+    );
   }
 
   async function handleSignIn() {
     "use server";
-    await signIn("github", { redirectTo: "/dashboard" });
+    await signIn("github", { redirectTo: "/" });
   }
 
   return (
@@ -52,7 +80,7 @@ export default async function Home() {
               {
                 label: "Collections", active: false, icon: (
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                   </svg>
                 )
               },
@@ -66,7 +94,7 @@ export default async function Home() {
               {
                 label: "Import / Export", active: false, icon: (
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                   </svg>
                 )
               },
@@ -78,25 +106,22 @@ export default async function Home() {
                   </svg>
                 )
               },
-            ].map((item) => (
+            ].map(({ label, active, icon }) => (
               <span
-                key={item.label}
-                className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all ${item.active
-                  ? "bg-accent/10 text-accent shadow-sm"
-                  : "text-zinc-600 dark:text-zinc-400"
+                key={label}
+                className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${active
+                    ? "bg-accent/10 text-accent"
+                    : "text-zinc-500 dark:text-zinc-400"
                   }`}
               >
-                <span className={item.active ? "text-accent" : "text-zinc-400 dark:text-zinc-500"}>
-                  {item.icon}
-                </span>
-                {item.label}
+                {icon}
+                {label}
               </span>
             ))}
           </nav>
         </aside>
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto bg-zinc-50/50 p-4 md:p-8 dark:bg-zinc-950/50">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">
           <div className="mx-auto max-w-5xl">
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
@@ -107,41 +132,6 @@ export default async function Home() {
               </span>
             </div>
 
-            {/* Search bar */}
-            <div className="mb-5 flex gap-2">
-              <div className="relative flex-1">
-                <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <div className="w-full rounded-xl border border-zinc-200 bg-white py-2.5 pl-10 pr-3 text-sm text-zinc-400 shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-500">
-                  Search bookmarks...
-                </div>
-              </div>
-              <span className="rounded-lg bg-zinc-100 px-3 py-2.5 text-sm font-medium text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                Search
-              </span>
-            </div>
-
-            {/* Sort controls */}
-            <div className="mb-5 flex items-center gap-2">
-              <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sort by:</span>
-              <div className="flex gap-1 rounded-lg bg-zinc-100 p-0.5 dark:bg-zinc-800">
-                {["Newest", "Oldest", "Title"].map((s, i) => (
-                  <span
-                    key={s}
-                    className={`rounded-md px-2.5 py-1 text-xs font-medium ${i === 0
-                      ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-50"
-                      : "text-zinc-500 dark:text-zinc-400"
-                      }`}
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-              <span className="ml-auto text-xs text-zinc-400 dark:text-zinc-500">
-                Select
-              </span>
-            </div>
             {/* Branding */}
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div className="mb-4 flex items-center gap-2">

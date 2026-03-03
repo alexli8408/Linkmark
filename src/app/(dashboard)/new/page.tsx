@@ -38,7 +38,7 @@ export default function NewBookmarkPage() {
       }
 
       toast.success("Bookmark saved");
-      router.push("/dashboard");
+      router.push("/");
       router.refresh();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Something went wrong";

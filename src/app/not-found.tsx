@@ -10,7 +10,7 @@ export default function NotFound() {
         Page not found.
       </p>
       <Link
-        href="/dashboard"
+        href="/"
         className="btn-primary mt-8"
       >
         Back to Dashboard

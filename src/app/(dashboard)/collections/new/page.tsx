@@ -31,7 +31,7 @@ export default function NewCollectionPage() {
       }
 
       const collection = await res.json();
-      router.push(`/dashboard/collections/${collection.id}`);
+      router.push(`/collections/${collection.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

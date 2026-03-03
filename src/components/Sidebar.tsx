@@ -12,7 +12,7 @@ interface Tag {
 
 const navItems = [
   {
-    href: "/dashboard",
+    href: "/",
     label: "Bookmarks",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,7 +21,7 @@ const navItems = [
     ),
   },
   {
-    href: "/dashboard/collections",
+    href: "/collections",
     label: "Collections",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ const navItems = [
     ),
   },
   {
-    href: "/dashboard/analytics",
+    href: "/analytics",
     label: "Analytics",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -39,7 +39,7 @@ const navItems = [
     ),
   },
   {
-    href: "/dashboard/import-export",
+    href: "/import-export",
     label: "Import / Export",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +48,7 @@ const navItems = [
     ),
   },
   {
-    href: "/dashboard/settings",
+    href: "/settings",
     label: "Settings",
     icon: (
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,8 +67,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const [tagsLoading, setTagsLoading] = useState(true);
 
   function isActive(href: string) {
-    if (href === "/dashboard") {
-      return pathname === "/dashboard" && !activeTag;
+    if (href === "/") {
+      return pathname === "/" && !activeTag;
     }
     return pathname.startsWith(href);
   }
@@ -136,8 +136,8 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                 key={tag.id}
                 href={
                   activeTag === tag.name
-                    ? "/dashboard"
-                    : `/dashboard?tag=${encodeURIComponent(tag.name)}`
+                    ? "/"
+                    : `/?tag=${encodeURIComponent(tag.name)}`
                 }
                 onClick={onNavigate}
                 className={`flex items-center justify-between rounded-lg px-3 py-1.5 text-sm transition-all duration-150 ${activeTag === tag.name

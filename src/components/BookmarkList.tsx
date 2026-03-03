@@ -106,7 +106,7 @@ export default function BookmarkList() {
           params.delete(key);
         }
       }
-      router.push(`/dashboard?${params.toString()}`);
+      router.push(`/?${params.toString()}`);
     },
     [router, searchParams]
   );

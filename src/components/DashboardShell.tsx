@@ -18,7 +18,7 @@ export default function DashboardShell({ navbar, children }: DashboardShellProps
 
   const shortcuts = useMemo(
     () => ({
-      "mod+n": () => router.push("/dashboard/new"),
+      "mod+n": () => router.push("/new"),
       "?": () => setShortcutsOpen((prev) => !prev),
       escape: () => {
         setShortcutsOpen(false);
