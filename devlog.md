@@ -15,29 +15,30 @@ This document serves as the absolute, definitive reference manual for the projec
 The Linkmark system is composed of three distinct execution environments that coordinate asynchronously.
 
 1. **The Core Web Monolith (Next.js/Node.js):** The primary user interface and standard API gateway.
-2. **The Worker Subnet (AWS Lambda):** Ephemeral, stateless execution contexts responsible for heavy I/O network tasks.
-3. **The Edge Client (Chrome Extension):** A distributed client operating within the user's local browser context.
+1.  **The Core Web Monolith (Next.js/Node.js):** The primary user interface and standard API gateway.
+2.  **The Worker Subnet (AWS Lambda):** Ephemeral, stateless execution contexts responsible for heavy I/O network tasks.
+3.  **The Edge Client (Chrome Extension):** A distributed client operating within the user's local browser context.
 
 ```mermaid
 flowchart TD
     %% Edge Clients
-    U([Browser UI Client]) -->|React Server Components & Server Actions| NextJS[Next.js Application]
-    Ext([Chrome Extension V3]) -->|POST /api/extension/bookmarks & Bearer Token| NextJS
-    Chron([AWS EventBridge]) -->|Cron Schedule (rate: 1 day)| Lmbd
+    U([Browser UI Client]) -->|React Server Components and Server Actions| NextJS[Next.js Application]
+    Ext([Chrome Extension V3]) -->|POST API and Bearer Token| NextJS
+    Chron([AWS EventBridge]) -->|Cron Schedule rate 1 day| Lmbd
 
     %% Core App
-    subgraph Core Linkmark Application Environment
+    subgraph CoreApp [Core Linkmark Application Environment]
         NextJS
     end
 
     %% Persistence & Storage
-    NextJS -->|Prisma Client (TCP/PgBouncer)| PG[(PostgreSQL)]
-    NextJS -.->|AWS SDK v3 (S3 PutObject API)| S3[(AWS S3 Data Lake)]
-    NextJS -.->|AWS SDK v3 (Invoke API)| Lmbd[AWS Lambda Worker]
+    NextJS -->|Prisma Client| PG[(PostgreSQL)]
+    NextJS -.->|AWS S3 API| S3[(AWS S3 Data Lake)]
+    NextJS -.->|AWS Lambda Invoke API| Lmbd[AWS Lambda Worker]
 
-    subgraph AWS Lambda Execution Context
-        Lmbd -.->|node-postgres (TCP)| PG
-        Lmbd -.->|Concurrent HTTP HEAD Requests| ExtWeb((External Websites / The Open Web))
+    subgraph LambdaEnv [AWS Lambda Execution Context]
+        Lmbd -.->|node-postgres TCP| PG
+        Lmbd -.->|Concurrent HTTP HEAD Requests| ExtWeb((External Websites))
         Lmbd -.->|Bulk SQL UPDATE Reports| PG
     end
 ```
