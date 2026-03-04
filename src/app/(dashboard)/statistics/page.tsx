@@ -54,7 +54,7 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Statistics</h1>
 
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-3">
