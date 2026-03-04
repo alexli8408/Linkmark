@@ -55,7 +55,7 @@ export default function CollectionDetailPage() {
   );
 
   async function loadCollection() {
-    const res = await fetch(`/api/collections/${id}`);
+    const res = await fetch(`/api/groups/${id}`);
     if (!res.ok) {
       setLoading(false);
       return;
@@ -78,7 +78,7 @@ export default function CollectionDetailPage() {
     const newOrder = arrayMove(orderedBookmarks, oldIndex, newIndex);
     setOrderedBookmarks(newOrder);
 
-    fetch(`/api/collections/${id}/bookmarks/reorder`, {
+    fetch(`/api/groups/${id}/bookmarks/reorder`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderedBookmarkIds: newOrder.map((b) => b.id) }),
@@ -91,7 +91,7 @@ export default function CollectionDetailPage() {
 
   async function handleSaveEdit() {
     try {
-      await fetch(`/api/collections/${id}`, {
+      await fetch(`/api/groups/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: editName, description: editDescription, isPublic: editIsPublic }),
@@ -106,7 +106,7 @@ export default function CollectionDetailPage() {
 
   async function handleAddBookmark(bookmarkId: string) {
     try {
-      await fetch(`/api/collections/${id}/bookmarks`, {
+      await fetch(`/api/groups/${id}/bookmarks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookmarkId }),
@@ -121,7 +121,7 @@ export default function CollectionDetailPage() {
 
   async function handleRemoveBookmark(bookmarkId: string) {
     try {
-      await fetch(`/api/collections/${id}/bookmarks?bookmarkId=${bookmarkId}`, {
+      await fetch(`/api/groups/${id}/bookmarks?bookmarkId=${bookmarkId}`, {
         method: "DELETE",
       });
       toast.success("Bookmark removed from collection");

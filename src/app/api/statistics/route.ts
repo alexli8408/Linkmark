@@ -10,7 +10,7 @@ export async function GET() {
 
   const userId = session.user.id;
 
-  const [totalBookmarks, totalCollections, totalTags, topTags, recentBookmarks, bookmarksOverTime] =
+  const [totalBookmarks, totalGroups, totalTags, topTags, recentBookmarks, bookmarksOverTime] =
     await Promise.all([
       prisma.bookmark.count({ where: { userId } }),
       prisma.collection.count({ where: { userId } }),
@@ -38,7 +38,7 @@ export async function GET() {
 
   return NextResponse.json({
     totalBookmarks,
-    totalCollections,
+    totalGroups,
     totalTags,
     topTags: topTags.map((t) => ({ name: t.name, count: t._count.bookmarks })),
     recentBookmarks,

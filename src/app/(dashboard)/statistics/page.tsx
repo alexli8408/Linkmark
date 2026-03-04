@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 interface Analytics {
   totalBookmarks: number;
-  totalCollections: number;
+  totalGroups: number;
   totalTags: number;
   topTags: { name: string; count: number }[];
   recentBookmarks: { id: string; title: string | null; url: string; createdAt: string }[];
@@ -16,7 +16,7 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/analytics")
+    fetch("/api/statistics")
       .then((res) => res.json())
       .then((d) => {
         setData(d);
@@ -28,7 +28,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Statistics</h1>
         <div className="grid gap-4 sm:grid-cols-3">
           {[1, 2, 3].map((i) => (
             <div key={i} className="h-24 rounded-xl border border-zinc-200/80 skeleton-shimmer dark:border-zinc-800/80" />
@@ -41,9 +41,9 @@ export default function AnalyticsPage() {
   if (!data) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Analytics</h1>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Statistics</h1>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Unable to load analytics data. Try refreshing the page.
+          Unable to load statistics data. Try refreshing the page.
         </p>
       </div>
     );
@@ -59,7 +59,7 @@ export default function AnalyticsPage() {
       {/* Stat cards */}
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard label="Total Bookmarks" value={data.totalBookmarks} />
-        <StatCard label="Collections" value={data.totalCollections} />
+        <StatCard label="Groups" value={data.totalGroups} />
         <StatCard label="Tags" value={data.totalTags} />
       </div>
 

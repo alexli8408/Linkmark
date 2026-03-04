@@ -23,7 +23,7 @@ export default function CollectionsPage() {
 
   useEffect(() => {
     async function load() {
-      const res = await fetch("/api/collections");
+      const res = await fetch("/api/groups");
       const data = await res.json();
       setCollections(data);
       setLoading(false);
@@ -33,7 +33,7 @@ export default function CollectionsPage() {
 
   async function handleDelete(id: string) {
     try {
-      await fetch(`/api/collections/${id}`, { method: "DELETE" });
+      await fetch(`/api/groups/${id}`, { method: "DELETE" });
       setCollections((prev) => prev.filter((c) => c.id !== id));
       toast.success("Collection deleted");
     } catch {
@@ -47,7 +47,7 @@ export default function CollectionsPage() {
       <div>
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Collections
+            Groups
           </h1>
         </div>
         <CollectionGridSkeleton />
@@ -59,10 +59,10 @@ export default function CollectionsPage() {
     <div>
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Collections
+          Groups
         </h1>
         <Link
-          href="/collections/new"
+          href="/groups/new"
           className="btn-primary w-fit gap-1.5"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@ export default function CollectionsPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
           </svg>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            No collections yet. Create one to organize your bookmarks.
+            No groups yet. Create one to organize your bookmarks.
           </p>
         </div>
       ) : (
@@ -89,7 +89,7 @@ export default function CollectionsPage() {
               className="group relative overflow-hidden rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md dark:border-zinc-800/80 dark:bg-zinc-900 dark:hover:border-zinc-700"
             >
               <Link
-                href={`/collections/${collection.id}`}
+                href={`/groups/${collection.id}`}
                 className="block"
               >
                 <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">

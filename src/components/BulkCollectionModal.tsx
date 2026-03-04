@@ -25,7 +25,7 @@ export default function BulkCollectionModal({
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    fetch("/api/collections")
+    fetch("/api/groups")
       .then((res) => res.json())
       .then((data) => {
         setCollections(data);
@@ -59,7 +59,7 @@ export default function BulkCollectionModal({
           {loading ? (
             <p className="py-3 text-center text-sm text-zinc-400">Loading...</p>
           ) : collections.length === 0 ? (
-            <p className="py-3 text-center text-sm text-zinc-400">No collections yet.</p>
+            <p className="py-3 text-center text-sm text-zinc-400">No groups yet.</p>
           ) : (
             collections.map((c) => (
               <button

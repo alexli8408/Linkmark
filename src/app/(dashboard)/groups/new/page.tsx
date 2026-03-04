@@ -16,7 +16,7 @@ export default function NewCollectionPage() {
     setError(null);
 
     try {
-      const res = await fetch("/api/collections", {
+      const res = await fetch("/api/groups", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -31,7 +31,7 @@ export default function NewCollectionPage() {
       }
 
       const collection = await res.json();
-      router.push(`/collections/${collection.id}`);
+      router.push(`/groups/${collection.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
