@@ -56,35 +56,11 @@ export default function ImportExportPage() {
   return (
     <div>
       <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-        Import / Export
+        Import/Export
       </h1>
 
-      {/* Export */}
-      <section className="mb-6 rounded-xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
-        <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Export Bookmarks
-        </h2>
-        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-          Download all your bookmarks as a file.
-        </p>
-        <div className="mt-4 flex gap-2">
-          <a
-            href="/api/bookmarks/export?format=json"
-            className="btn-primary"
-          >
-            Export JSON
-          </a>
-          <a
-            href="/api/bookmarks/export?format=csv"
-            className="btn-secondary"
-          >
-            Export CSV
-          </a>
-        </div>
-      </section>
-
       {/* Import */}
-      <section className="rounded-xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
+      <section className="mb-6 rounded-xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
         <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
           Import Bookmarks
         </h2>
@@ -120,6 +96,30 @@ export default function ImportExportPage() {
             </p>
           </div>
         )}
+      </section>
+
+      {/* Export */}
+      <section className="rounded-xl border border-zinc-200/80 bg-white p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-900">
+        <h2 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          Export Bookmarks
+        </h2>
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          Download all your bookmarks as a file.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <a
+            href="/api/bookmarks/export?format=json"
+            className="btn-primary"
+          >
+            Export JSON
+          </a>
+          <a
+            href="/api/bookmarks/export?format=csv"
+            className="btn-secondary"
+          >
+            Export CSV
+          </a>
+        </div>
       </section>
     </div>
   );
