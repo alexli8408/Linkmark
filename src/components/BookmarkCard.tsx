@@ -81,13 +81,13 @@ export default function BookmarkCard({
         )}
         {/* Preview image */}
         {metadataStatus === "pending" && !previewImage ? (
-          <div className="h-36 w-full skeleton-shimmer" />
+          <div className="aspect-video w-full skeleton-shimmer" />
         ) : previewImage ? (
           <div className="relative">
             <img
               src={previewImage}
               alt=""
-              className="h-36 w-full object-cover"
+              className="aspect-video w-full object-cover"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = "none";
               }}
