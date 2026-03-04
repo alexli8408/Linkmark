@@ -28,7 +28,7 @@ export async function GET() {
         select: { id: true, title: true, url: true, createdAt: true },
       }),
       prisma.$queryRaw<{ date: Date; count: bigint }[]>`
-        SELECT date_trunc('day', "createdAt")::date AS date, COUNT(*)::bigint AS count
+        SELECT date_trunc('day', "createdAt" AT TIME ZONE 'America/New_York')::date AS date, COUNT(*)::bigint AS count
         FROM "Bookmark"
         WHERE "userId" = ${userId} AND "createdAt" >= NOW() - INTERVAL '30 days'
         GROUP BY date
