@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Linkmark",
   description: "Save, organize, and find your bookmarks",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/icon.svg",
   },
   openGraph: {
     title: "Linkmark",
