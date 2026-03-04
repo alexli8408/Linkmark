@@ -1,87 +1,91 @@
 # Linkmark
 
-Linkmark is a full-stack, comprehensive bookmark manager built with [Next.js](https://nextjs.org), designed to help you organize and maintain your saved links efficiently.
+A full-stack bookmark manager built with Next.js, designed to save, organize, and find your bookmarks.
+
+**Live:** [linkmark.tech](https://linkmark.tech)
 
 ## Features
 
-- **Bookmark Management:** Save, organize, and manage bookmarks with metadata such as titles, descriptions, favicons, and preview images.
-- **Collections & Tags:** Group links into collections and apply tags for flexible organization. Supports drag-and-drop (`@dnd-kit`) for intuitive ordering.
-- **Chrome Extension:** A companion Chrome extension (`/extension`) that allows you to easily save bookmarks to your Linkmark account with a single click via an API Key.
-- **Broken Link Checker:** An AWS Lambda function (`/lambda`) that periodically checks all your saved bookmarks via HEAD requests to detect and report broken links.
-- **Authentication:** Integrated with [NextAuth.js](https://next-auth.js.org/) for robust user authentication and session management.
-- **PostgreSQL Database:** Powered by [Prisma](https://www.prisma.io/) ORM and a PostgreSQL database to store users, bookmarks, tags, and collections.
-- **AWS S3 Integration:** Uses AWS S3 for storing assets like favicons or preview images.
+- **Bookmark Management** — Save bookmarks with auto-fetched metadata (titles, descriptions, favicons, preview images). Add notes and tags for flexible organization.
+- **Groups** — Organize bookmarks into shareable groups with drag-and-drop ordering via `@dnd-kit`.
+- **Tags** — Apply tags to bookmarks for quick filtering. Orphaned tags (0 bookmarks) are automatically cleaned up.
+- **Bulk Actions** — Select multiple bookmarks to tag, add to a group, or delete in one action.
+- **Search** — Full-text search across bookmark titles, URLs, descriptions, and notes.
+- **Statistics** — View your bookmark activity over time, top tags, and recent bookmarks.
+- **Import/Export** — Import bookmarks from JSON, CSV, or HTML files. Export as JSON or CSV.
+- **Chrome Extension** — Save bookmarks from any page with a single click using an API key.
+- **Broken Link Checker** — AWS Lambda function that periodically checks all your bookmarks for broken URLs.
+- **Authentication** — GitHub OAuth via NextAuth.js (Auth.js).
+- **Keyboard Shortcuts** — `Cmd+N` to add a bookmark, `?` to view all shortcuts.
 
-## Architecture & Deep Dive
+## Tech Stack
 
-Linkmark is a complex distributed system orchestrating a Next.js App Router monolith, a PostgreSQL database, an AWS Lambda worker, and a Manifest V3 Chrome Extension.
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Database | PostgreSQL, Prisma ORM |
+| Auth | NextAuth (Auth.js) |
+| Styling | Tailwind CSS v4 |
+| Cloud | AWS S3, AWS Lambda |
+| UI | React 19, dnd-kit |
 
-> [!IMPORTANT]
-> For an exhaustive, highly-detailed breakdown of the system architecture, database indexing, React optimistic UI patterns, and security paradigms, please read the [Ultimate Engineering Devlog](./devlog.md).
+## Project Structure
 
-### Project Structure Highlights
+```
+src/
+├── app/            # Next.js App Router pages and API routes
+├── components/     # React components (BookmarkCard, Sidebar, etc.)
+├── hooks/          # Custom React hooks
+├── lib/            # Utilities (auth, prisma, S3, metadata fetching)
+└── types/          # TypeScript type definitions
 
-- `src/`: Core Next.js application, including the app router (`app/`), React components (`components/`), hooks, and utility functions (`lib/`).
-- `prisma/`: Database schema (`schema.prisma`) and sequence migrations. Features strict Foreign Key indexing and explicit junction tables for Drag-and-Drop functionality.
-- `extension/`: Chrome extension source code with manifest v3. Implements stateless Bearer token cryptography for secure saving.
-- `lambda/`: AWS Lambda Node.js script (`index.mjs`) to check for broken URLs in the database efficiently via HTTP HEAD requests, bypassing Next.js edge limits.
+extension/          # Chrome extension (Manifest V3)
+lambda/
+├── index.mjs             # Broken link checker
+└── metadata-fetcher/     # Async metadata fetcher
+prisma/             # Database schema and migrations
+```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v20+ recommended)
-- A PostgreSQL database
-- AWS Account (for S3 and Lambda features)
-- Chrome Browser (for the extension)
+- Node.js v20+
+- PostgreSQL database
+- AWS account (for S3 and Lambda)
 
-### Local Development
+### Setup
 
 1. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. **Environment Variables:**
-   Create a `.env` file based on `.env.example` and fill in the necessary values, including `DATABASE_URL`, NextAuth secrets, and AWS credentials.
+2. **Configure environment:**
+   Copy `.env.example` to `.env` and fill in `DATABASE_URL`, NextAuth secrets, and AWS credentials.
 
-3. **Database Setup:**
-   Run Prisma migrations to set up your database schema:
+3. **Run database migrations:**
    ```bash
-   npm run build # The build script includes prisma migrate deploy
-   # OR manually:
    npx prisma migrate dev
    ```
 
-4. **Start the Development Server:**
+4. **Start the dev server:**
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
+5. Open [http://localhost:3000](http://localhost:3000).
 
-## Chrome Extension Setup
+### Chrome Extension
 
-1. Open Chrome and navigate to `chrome://extensions/`.
-2. Enable "Developer mode" in the top right corner.
-3. Click "Load unpacked" and select the `extension/` directory in this project.
-4. Generate an API Key in your Linkmark dashboard and configure the extension to start saving bookmarks!
+1. Go to `chrome://extensions/` and enable Developer mode.
+2. Click "Load unpacked" and select the `extension/` directory.
+3. Generate an API key in Settings and configure the extension.
 
-## Lambda Broken Link Checker Setup
+### Broken Link Checker (Lambda)
 
-The broken link checker is designed to run on AWS Lambda.
-1. Navigate to the `lambda/` directory.
-2. Run `npm install` within that directory.
-3. Zip the contents (including `node_modules`).
-4. Upload to AWS Lambda (Node.js 20.x runtime).
-5. Set the `DATABASE_URL` environment variable in the Lambda configuration.
-6. Trigger via EventBridge on a schedule (e.g., daily).
-
-## Tech Stack
-
-- **Framework:** Next.js (App Router)
-- **Database:** PostgreSQL & Prisma ORM
-- **Auth:** NextAuth (Auth.js)
-- **Styling:** Tailwind CSS v4
-- **Cloud:** AWS (S3, Lambda)
-- **UI:** React, dnd-kit (Drag and drop)
+1. `cd lambda && npm install`
+2. Zip contents and upload to AWS Lambda (Node.js 20.x).
+3. Set `DATABASE_URL` environment variable.
+4. Schedule via EventBridge (e.g., daily).

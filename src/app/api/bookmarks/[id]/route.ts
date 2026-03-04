@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { deleteOrphanedTags } from "@/lib/deleteOrphanedTags";
 
 // GET /api/bookmarks/[id]
 export async function GET(
@@ -74,6 +75,9 @@ export async function PATCH(
         })
       );
     }
+
+    // Clean up orphaned tags
+    await deleteOrphanedTags(session.user.id);
   }
 
   const bookmark = await prisma.bookmark.update({
@@ -111,6 +115,9 @@ export async function DELETE(
   }
 
   await prisma.bookmark.delete({ where: { id } });
+
+  // Clean up orphaned tags
+  await deleteOrphanedTags(session.user.id);
 
   return NextResponse.json({ success: true });
 }

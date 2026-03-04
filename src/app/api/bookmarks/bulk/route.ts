@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { deleteOrphanedTags } from "@/lib/deleteOrphanedTags";
 
 export async function DELETE(req: NextRequest) {
   const session = await auth();
@@ -16,6 +17,9 @@ export async function DELETE(req: NextRequest) {
   const result = await prisma.bookmark.deleteMany({
     where: { id: { in: ids }, userId: session.user.id },
   });
+
+  // Clean up orphaned tags
+  await deleteOrphanedTags(session.user.id);
 
   return NextResponse.json({ deleted: result.count });
 }
