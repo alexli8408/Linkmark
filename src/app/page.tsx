@@ -25,7 +25,7 @@ export default async function Home() {
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Add Bookmark
+              + New Bookmark
             </Link>
           </div>
 
@@ -128,7 +128,7 @@ export default async function Home() {
                 Bookmarks
               </h1>
               <span className="w-fit rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                + Add Bookmark
+                + New Bookmark
               </span>
             </div>
 

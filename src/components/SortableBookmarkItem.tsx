@@ -53,7 +53,7 @@ export default function SortableBookmarkItem({
       </div>
       <button
         onClick={() => onRemove(bookmark.id)}
-        aria-label="Remove from collection"
+        aria-label="Remove from group"
         className="absolute right-12 top-4 rounded-lg p-1.5 text-zinc-400 opacity-100 transition-all hover:bg-red-50 hover:text-red-500 md:opacity-0 md:group-hover/sort:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
       >
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

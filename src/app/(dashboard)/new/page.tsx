@@ -52,7 +52,7 @@ export default function NewBookmarkPage() {
   return (
     <div className="mx-auto max-w-lg">
       <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-        Add Bookmark
+        New Bookmark
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">

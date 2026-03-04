@@ -27,7 +27,7 @@ export default function NewCollectionPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error ?? "Failed to create collection");
+        throw new Error(data.error ?? "Failed to create group");
       }
 
       const collection = await res.json();
@@ -42,7 +42,7 @@ export default function NewCollectionPage() {
   return (
     <div className="mx-auto max-w-lg">
       <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-        New Collection
+        New Group
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -68,7 +68,7 @@ export default function NewCollectionPage() {
           <textarea
             id="description"
             rows={2}
-            placeholder="What's this collection about?"
+            placeholder="What's this group about?"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="input-base"
@@ -85,7 +85,7 @@ export default function NewCollectionPage() {
             disabled={loading}
             className="btn-primary disabled:opacity-50"
           >
-            {loading ? "Creating..." : "Create Collection"}
+            {loading ? "Creating..." : "Create Group"}
           </button>
           <button
             type="button"

@@ -96,11 +96,11 @@ export default function CollectionDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: editName, description: editDescription, isPublic: editIsPublic }),
       });
-      toast.success("Collection updated");
+      toast.success("Group updated");
       setEditing(false);
       loadCollection();
     } catch {
-      toast.error("Failed to update collection");
+      toast.error("Failed to update group");
     }
   }
 
@@ -111,7 +111,7 @@ export default function CollectionDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookmarkId }),
       });
-      toast.success("Bookmark added to collection");
+      toast.success("Bookmark added to group");
       setShowAddPicker(false);
       loadCollection();
     } catch {
@@ -124,7 +124,7 @@ export default function CollectionDetailPage() {
       await fetch(`/api/groups/${id}/bookmarks?bookmarkId=${bookmarkId}`, {
         method: "DELETE",
       });
-      toast.success("Bookmark removed from collection");
+      toast.success("Bookmark removed from group");
       loadCollection();
     } catch {
       toast.error("Failed to remove bookmark");
@@ -154,7 +154,7 @@ export default function CollectionDetailPage() {
   }
 
   if (!collection) {
-    return <p className="text-sm text-red-500">Collection not found.</p>;
+    return <p className="text-sm text-red-500">Group not found.</p>;
   }
 
   return (
@@ -184,7 +184,7 @@ export default function CollectionDetailPage() {
                 className="rounded border-zinc-300 accent-accent"
               />
               <span className="text-zinc-700 dark:text-zinc-300">
-                Make this collection public
+                Make this group public
               </span>
             </label>
             <div className="flex gap-2">
@@ -280,7 +280,7 @@ export default function CollectionDetailPage() {
           </div>
           {allBookmarks.length === 0 ? (
             <p className="text-xs text-zinc-500">
-              All your bookmarks are already in this collection.
+              All your bookmarks are already in this group.
             </p>
           ) : (
             <div className="flex max-h-48 flex-col gap-0.5 overflow-y-auto">

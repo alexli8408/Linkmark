@@ -50,10 +50,10 @@ export default function BulkCollectionModal({
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-          Add to Collection
+          Add to Group
         </h2>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Choose a collection for the selected bookmarks.
+          Choose a group for the selected bookmarks.
         </p>
         <div className="mt-3 flex max-h-48 flex-col gap-0.5 overflow-y-auto">
           {loading ? (

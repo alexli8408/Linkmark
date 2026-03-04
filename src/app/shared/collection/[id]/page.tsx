@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
   if (!collection) return { title: "Not Found" };
   return {
     title: `${collection.name} — Linkmark`,
-    description: collection.description ?? "A shared collection on Linkmark",
+    description: collection.description ?? "A shared group on Linkmark",
   };
 }
 

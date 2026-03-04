@@ -36,10 +36,10 @@ export default function BulkActionToolbar({
           </button>
           <button
             onClick={onMoveToCollection}
-            aria-label="Add selected bookmarks to collection"
+            aria-label="Add selected bookmarks to group"
             className="btn-secondary !py-1.5 !px-3 !text-xs"
           >
-            Add to Collection
+            Add to Group
           </button>
           <button
             onClick={() => setShowDeleteConfirm(true)}

@@ -117,7 +117,7 @@ export default function PrivacyPage() {
             Data Deletion
           </h2>
           <p className="mt-2">
-            You can delete individual bookmarks, collections, and tags at any
+            You can delete individual bookmarks, groups, and tags at any
             time from the dashboard. To delete your entire account and all
             associated data, contact us at the email below.
           </p>

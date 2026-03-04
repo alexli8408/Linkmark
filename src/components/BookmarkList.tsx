@@ -91,7 +91,7 @@ export default function BookmarkList() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids, collectionId }),
     });
-    toast.success(`Added ${ids.length} bookmark${ids.length !== 1 ? "s" : ""} to collection`);
+    toast.success(`Added ${ids.length} bookmark${ids.length !== 1 ? "s" : ""} to group`);
     setShowBulkCollectionModal(false);
     exitSelectMode();
   }
