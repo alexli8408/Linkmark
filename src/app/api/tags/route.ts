@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { deleteOrphanedTags } from "@/lib/deleteOrphanedTags";
 
 // GET /api/tags — list all tags for the current user (with optional ?q= autocomplete)
 export async function GET(req: NextRequest) {
@@ -11,6 +12,9 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const query = searchParams.get("q");
+
+  // Clean up any orphaned tags first
+  await deleteOrphanedTags(session.user.id);
 
   const tags = await prisma.tag.findMany({
     where: {
