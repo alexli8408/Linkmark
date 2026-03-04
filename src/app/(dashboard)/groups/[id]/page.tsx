@@ -227,12 +227,12 @@ export default function CollectionDetailPage() {
               {collection.isPublic && (
                 <div className="mt-1.5 flex items-center gap-2">
                   <span className="truncate text-xs text-zinc-400">
-                    {window.location.origin}/shared/collection/{collection.id}
+                    {window.location.origin}/shared/group/{collection.id}
                   </span>
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `${window.location.origin}/shared/collection/${collection.id}`
+                        `${window.location.origin}/shared/group/${collection.id}`
                       );
                       toast.success("Link copied");
                     }}
@@ -298,7 +298,7 @@ export default function CollectionDetailPage() {
         </div>
       )}
 
-      {/* Bookmarks in collection */}
+      {/* Bookmarks in group */}
       {orderedBookmarks.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <svg className="mb-4 h-12 w-12 text-zinc-300 dark:text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

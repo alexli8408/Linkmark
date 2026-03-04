@@ -86,7 +86,7 @@ export default function BookmarkList() {
 
   async function handleBulkAddToCollection(collectionId: string) {
     const ids = Array.from(selectedIds);
-    await fetch("/api/bookmarks/bulk/collection", {
+    await fetch("/api/bookmarks/bulk/group", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ids, collectionId }),
