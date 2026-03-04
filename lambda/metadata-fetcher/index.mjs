@@ -22,9 +22,16 @@ export async function handler(event) {
       ? await uploadToS3(metadata.previewImageUrl, `previews/${urlHash}.jpg`, 100)
       : null;
 
+    // Preserve user-provided titles: only use fetched title if none was set
+    const { rows } = await client.query(
+      `SELECT "title" FROM "Bookmark" WHERE "id" = $1`,
+      [bookmarkId]
+    );
+    const existingTitle = rows[0]?.title;
+
     await client.query(
       `UPDATE "Bookmark"
-       SET "title" = COALESCE($1, "title"),
+       SET "title" = $1,
            "description" = $2,
            "favicon" = $3,
            "previewImage" = $4,
@@ -32,7 +39,7 @@ export async function handler(event) {
            "updatedAt" = NOW()
        WHERE "id" = $5`,
       [
-        metadata.title,
+        existingTitle ?? metadata.title,
         metadata.description,
         s3Favicon ?? metadata.faviconUrl,
         s3Preview ?? metadata.previewImageUrl,
