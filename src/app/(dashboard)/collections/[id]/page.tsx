@@ -305,7 +305,7 @@ export default function CollectionDetailPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
           </svg>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            This collection is empty. Add some bookmarks to it.
+            No bookmarks yet.
           </p>
         </div>
       ) : (
