@@ -61,14 +61,14 @@ export default function SettingsPage() {
           API Keys
         </h2>
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-          Generate API keys for the Chrome extension or other integrations.
+          Create API keys for the Chrome Extension.
         </p>
 
         <button
           onClick={generateKey}
           className="btn-primary mt-4"
         >
-          Generate New Key
+          + Create New API Key
         </button>
 
         {newKey && (
